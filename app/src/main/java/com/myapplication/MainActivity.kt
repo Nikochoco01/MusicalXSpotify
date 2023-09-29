@@ -1,6 +1,9 @@
 package com.myapplication
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -18,16 +21,25 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.myapplication.dataSource.SpotifyClient
+import com.myapplication.model.accessToken.ApiAccess
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +52,7 @@ class MainActivity : ComponentActivity() {
 //                    color = MaterialTheme.colorScheme.background
                 ) {
                     Greeting()
+                    executeCall(this)
                 }
             }
         }
@@ -154,5 +167,39 @@ fun Greeting(modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     MusicalXSpotifyTheme {
         Greeting()
+    }
+}
+
+private fun executeCall(context: Context) {
+    val credential: String = ApiAccess().grantType
+    val clientId: String = ApiAccess().clientId
+    val clientSecret: String = ApiAccess().clientSecret
+    GlobalScope.launch(Dispatchers.Main) {
+        try {
+            val response = SpotifyClient.apiServiceAccessToken.getAccessToken(credential, clientId, clientSecret)
+
+            if (response.isSuccessful && response.body() != null) {
+                val content = response.body()
+                Log.d("Resp token", content?.accessToken.toString())
+                Log.d("Resp token type", content?.tokenType.toString())
+                Log.d("Resp token expires", content?.expiresIn.toString())
+            } else {
+                Log.e("Error resp message", response.message())
+                Log.e("Error resp code", response.code().toString())
+                Toast.makeText(
+                    context,
+                    "Error Occurred: ${response.message()}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+        } catch (e: Exception) {
+            Log.e("Error exception", "error: ${e.message}")
+            Toast.makeText(
+                context,
+                "Error Occurred: ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }
