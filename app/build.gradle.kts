@@ -59,6 +59,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.3")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -67,6 +69,10 @@ dependencies {
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
+
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$2.4.0")
+    implementation ("androidx.navigation:navigation-compose:2.4.0-alpha06")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose: 2.5.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
