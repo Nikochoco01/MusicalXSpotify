@@ -1,3 +1,11 @@
 package com.myapplication.model.users
 
-data class SpotifyUsers(val id: Int, val images: String, val name: String)
+import com.google.gson.annotations.SerializedName
+
+data class SpotifyUsers(
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("images")
+    val images: ArrayList<String>,
+    @SerializedName("display_name")
+    val name: String)
