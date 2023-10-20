@@ -1,4 +1,4 @@
-package com.myapplication
+package com.musicalxspotify
 
 import org.junit.Test
 

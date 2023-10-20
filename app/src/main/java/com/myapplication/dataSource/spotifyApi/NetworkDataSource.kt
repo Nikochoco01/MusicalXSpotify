@@ -1,4 +1,4 @@
-package com.myapplication.dataSource
+package com.myapplication.dataSource.spotifyApi
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object SpotifyClient {
+object NetworkDataSource {
     private const val ACCESS_TOKEN_URL: String = "https://accounts.spotify.com/"
     private const val BASE_URL: String = "https://api.spotify.com/v1/"
 
@@ -34,11 +34,11 @@ object SpotifyClient {
             .build()
     }
 
-    val apiServiceAccessToken :  ApiService by lazy{
-        retrofitAccessToken.create(ApiService::class.java)
+    val apiServiceAccessToken : SpotifyService by lazy{
+        retrofitAccessToken.create(SpotifyService::class.java)
     }
 
-    val apiServiceCallAPi: ApiService by lazy{
-        retrofitCallApi.create(ApiService::class.java)
+    val apiServiceCallAPi: SpotifyService by lazy{
+        retrofitCallApi.create(SpotifyService::class.java)
     }
 }
