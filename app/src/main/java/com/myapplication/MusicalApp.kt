@@ -42,6 +42,7 @@ import com.myapplication.ui.SettingsView
 @Composable
 fun MusicalApp(
     loginViewModel: LoginViewModel,
+    playlistViewModel: PlaylistViewModel,
     navigateToDetail: (Long) -> Unit = {}
 ) {
     val token by loginViewModel.spotifyTokenLiveData.observeAsState()
@@ -50,6 +51,7 @@ fun MusicalApp(
 //        loginViewModel.fetchSpotifyToken()
 //    }
     MusicalAppContent(
+        playlistViewModel = playlistViewModel,
         navigateToDetail = navigateToDetail
     )
 }
@@ -58,6 +60,7 @@ fun MusicalApp(
 @Composable
 fun MusicalAppContent(
     modifier: Modifier = Modifier,
+    playlistViewModel: PlaylistViewModel,
     navigateToDetail: (Long) -> Unit,
 ) {
 
@@ -101,7 +104,7 @@ fun MusicalAppContent(
                 ReaderView(modifier = modifier.weight(1f))
             }
             MusicalRoute.PLAYLIST -> {
-                PlaylistView(modifier = modifier.weight(1f))
+                PlaylistView(modifier = modifier.weight(1f), playlistViewModel)
             }
             MusicalRoute.SETTINGS -> {
                 SettingsView(modifier = modifier.weight(1f))

@@ -21,7 +21,7 @@ import com.myapplication.model.Musics
 fun MusicListItem(
     music: Musics,
     modifier: Modifier = Modifier,
-    navigateToDetail: (Long) -> Unit
+//    navigateToDetail: (Long) -> Unit
 ){
     ListItem(
         modifier = modifier
