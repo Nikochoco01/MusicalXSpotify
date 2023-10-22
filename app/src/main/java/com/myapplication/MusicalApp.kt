@@ -1,30 +1,16 @@
 package com.myapplication
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.GraphicEq
-import androidx.compose.material.icons.filled.LibraryMusic
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -32,12 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import com.myapplication.model.accessToken.AccessToken
+import com.myapplication.ui.MusicalIcons
 import com.myapplication.ui.PlaylistView
 import com.myapplication.ui.ReaderView
 import com.myapplication.ui.SettingsView
+import com.myapplication.ui.components.MusicTopNavBar
 
 @Composable
 fun MusicalApp(
@@ -71,40 +56,19 @@ fun MusicalAppContent(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        
-        CenterAlignedTopAppBar(
-            modifier = modifier.background(MaterialTheme.colorScheme.surface),
-            title = {
-                Text(
-                    text = selectedDestination.value,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = { /* doSomething() */ }) {
-                    Icon(
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "Localized description"
-                    )
-                }
-            },
-            actions = {
-                IconButton(onClick = { /* doSomething() */ }) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        contentDescription = "Localized description"
-                    )
-                }
-            }
-        )
+
+        MusicTopNavBar(modifier = modifier,
+            selectedDestination = selectedDestination)
 
         when(selectedDestination.value){
             MusicalRoute.READER -> {
                 ReaderView(modifier = modifier.weight(1f))
             }
             MusicalRoute.PLAYLIST -> {
-                PlaylistView(modifier = modifier.weight(1f), playlistViewModel)
+                PlaylistView(modifier = modifier.weight(1f), playlistViewModel, selectedDestination)
+            }
+            MusicalRoute.REMOVE -> {
+                PlaylistView(modifier = modifier.weight(1f), playlistViewModel, selectedDestination)
             }
             MusicalRoute.SETTINGS -> {
                 SettingsView(modifier = modifier.weight(1f))
@@ -114,21 +78,21 @@ fun MusicalAppContent(
         NavigationBar(
             modifier = modifier.fillMaxWidth()
         ) {
-            TOP_LEVEL_DESTINATIONS.forEach { replyDestination ->
+            TOP_LEVEL_DESTINATIONS.forEach { musicalDestination ->
                 NavigationBarItem(
                     icon = {
                         Icon(
-                            imageVector = replyDestination.selectedIcon,
-                            contentDescription = stringResource(id = replyDestination.iconTextId)
+                            imageVector = musicalDestination.selectedIcon,
+                            contentDescription = stringResource(id = musicalDestination.iconTextId)
                         )
                     },
                     label = {
                         Text(
-                            text = stringResource(replyDestination.iconTextId)
+                            text = stringResource(musicalDestination.iconTextId)
                         )
                     },
-                    selected = selectedDestination.value == replyDestination.route,
-                    onClick = { selectedDestination.value = replyDestination.route }
+                    selected = selectedDestination.value == musicalDestination.route,
+                    onClick = { selectedDestination.value = musicalDestination.route }
                 )
             }
         }
@@ -138,10 +102,11 @@ fun MusicalAppContent(
 object MusicalRoute {
     const val READER = "Reader"
     const val PLAYLIST = "Playlist"
+    const val REMOVE = "Remove"
     const val SETTINGS = "Settings"
 }
 
-data class ReplyTopLevelDestination(
+data class MusicTopLevelDestination(
     val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
@@ -149,22 +114,22 @@ data class ReplyTopLevelDestination(
 )
 
 val TOP_LEVEL_DESTINATIONS = listOf(
-    ReplyTopLevelDestination(
+    MusicTopLevelDestination(
         route = MusicalRoute.READER,
-        selectedIcon = Icons.Default.GraphicEq,
-        unselectedIcon = Icons.Default.GraphicEq,
+        selectedIcon = MusicalIcons.iconReader,
+        unselectedIcon = MusicalIcons.iconReader,
         iconTextId = R.string.tab_reader
     ),
-    ReplyTopLevelDestination(
+    MusicTopLevelDestination(
         route = MusicalRoute.PLAYLIST,
-        selectedIcon = Icons.Default.LibraryMusic,
-        unselectedIcon = Icons.Default.LibraryMusic,
+        selectedIcon = MusicalIcons.iconPlaylist,
+        unselectedIcon = MusicalIcons.iconPlaylist,
         iconTextId = R.string.tab_playlist
     ),
-    ReplyTopLevelDestination(
+    MusicTopLevelDestination(
         route = MusicalRoute.SETTINGS,
-        selectedIcon = Icons.Outlined.Settings,
-        unselectedIcon = Icons.Outlined.Settings,
+        selectedIcon = MusicalIcons.iconSettings,
+        unselectedIcon = MusicalIcons.iconSettings,
         iconTextId = R.string.tab_settings
     )
 )
