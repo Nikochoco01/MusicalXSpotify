@@ -9,17 +9,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.myapplication.model.Playlists
 import com.myapplication.ui.components.MusicListItem
+import com.myapplication.ui.components.MusicListItemSelected
 
 @Composable
 fun MusicListContent(
     modifier: Modifier = Modifier,
-    playlistViewModel: PlaylistViewModel
+    playlistViewModel: PlaylistViewModel,
+    selectedDestination: MutableState<String>
 ){
     LaunchedEffect(Unit){
         playlistViewModel.fetchPhoneFilePlaylist(1)
@@ -32,7 +35,10 @@ fun MusicListContent(
             Text(text = "Playlist Null")
         }
         else{
-            MusicList(modifier, gotLiveData)
+            if(selectedDestination.value == MusicalRoute.REMOVE)
+                MusicListRemove(modifier,gotLiveData)
+            else
+                MusicList(modifier, gotLiveData)
         }
     }
 }
@@ -47,6 +53,20 @@ fun MusicList(
         verticalArrangement = Arrangement.spacedBy(16.dp)){
         items(items = playlist.tracks, key = { it.id }){
             music -> MusicListItem(music = music)
+        }
+    }
+}
+
+@Composable
+fun MusicListRemove(
+    modifier: Modifier,
+    playlist : Playlists
+){
+    LazyColumn(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)){
+        items(items = playlist.tracks, key = { it.id }){
+                music -> MusicListItemSelected(music = music)
         }
     }
 }
