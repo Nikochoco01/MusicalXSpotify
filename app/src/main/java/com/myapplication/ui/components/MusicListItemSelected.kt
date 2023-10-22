@@ -1,16 +1,25 @@
 package com.myapplication.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,6 +33,7 @@ fun MusicListItemSelected(
     music: Musics,
     modifier: Modifier = Modifier
 ){
+    val checkedState = remember { mutableStateOf(false) }
     ListItem(
         modifier = modifier.clip(RoundedCornerShape(16.dp)),
         colors = ListItemDefaults.colors(
@@ -32,20 +42,33 @@ fun MusicListItemSelected(
         leadingContent = {
             MusicPicture(drawableResource = R.drawable.picture_1, description = "music picture")
         },
-        headlineText = {
-            Text(text = music.name,
+        overlineText = {
+            Text(
+                text = music.name,
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 24.sp,
-                    letterSpacing = 0.5.sp,
+//                    fontFamily = FontFamily(Font(R.font.roboto)),
                     fontWeight = FontWeight(500),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    letterSpacing = 0.25.sp,
+                )
+            )
+        },
+        headlineText = {
+            Text(text = music.artist,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp,
+                    letterSpacing = 0.5.sp,
+                    fontWeight = FontWeight(400),
                 )
             )
         },
         supportingText = {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)){
                 Text(
-                    text = music.artist,
+                    text = music.album,
                     style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
@@ -68,13 +91,12 @@ fun MusicListItemSelected(
                     )
                 )
             }
+        },
+        trailingContent = {
+            Checkbox(
+                checked = checkedState.value,
+                onCheckedChange = { checkedState.value = it }
+            )
         }
-//        trailingContent = {
-//            MusicCheckbox(
-//                checked = false,
-//                modifier = modifier,
-////                colors =
-//            )
-//        }
     )
 }
