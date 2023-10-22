@@ -21,9 +21,6 @@ fun PlaylistView(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Text(
-            color = Color.Red,
-            text = "YO")
         MusicListContent(modifier, playlistViewModel)
     }
 }
