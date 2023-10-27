@@ -20,10 +20,18 @@ object PhoneFilesDataSource {
     )
 
     private val playlists = listOf(
-        MusicalPlaylists(1, "", "Test playlist", musics)
+        MusicalPlaylists(1, "", "Test playlist", musics),
+        MusicalPlaylists(2, "", "Test playlist 2", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics),
+        MusicalPlaylists(3, "", "Test playlist 3", musics)
     )
     fun getPhonePlaylist(id: Int): MusicalPlaylists{
-       return playlists[id]
+       return playlists[id-1]
     }
     fun getPhonePlaylists(): List<MusicalPlaylists>{
         return playlists
