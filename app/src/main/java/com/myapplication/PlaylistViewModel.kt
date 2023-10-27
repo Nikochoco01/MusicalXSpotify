@@ -14,8 +14,10 @@ class PlaylistViewModel : ViewModel(){
     private var _phoneFileLiveData : MutableLiveData<MusicalPlaylists> = MutableLiveData<MusicalPlaylists>()
     val phoneFileLiveData : LiveData<MusicalPlaylists> = _phoneFileLiveData
 
+    private var _playlistsLiveData : MutableLiveData<List<MusicalPlaylists>> = MutableLiveData<List<MusicalPlaylists>>()
+    val playlistsLiveData : LiveData<List<MusicalPlaylists>> = _playlistsLiveData
+
     fun fetchPhoneFilePlaylist(id: Int){
-        Log.e("Test Call" , "CALL");
         viewModelScope.launch {
             PlaylistRepository.getPlaylist(id)
                 .catch {
@@ -23,6 +25,20 @@ class PlaylistViewModel : ViewModel(){
                 }
                 .collect{
                     _phoneFileLiveData.postValue(it)
+                    Log.e("Test Call" , "CALL");
+                }
+        }
+    }
+
+    fun fetchAllPlaylists(id: String){
+        Log.e("Test Call" , "CALL");
+        viewModelScope.launch {
+            PlaylistRepository.getPlaylists(id)
+                .catch {
+                    Log.e("playlist error" , it.toString())
+                }
+                .collect{
+                    _playlistsLiveData.postValue(it)
                 }
         }
     }
