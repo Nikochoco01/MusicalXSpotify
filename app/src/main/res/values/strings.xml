@@ -2,6 +2,6 @@
     <string name="app_name">MusicalXSpotify</string>
     <string name="login_menu">Login</string>
     <string name="tab_reader">Reader</string>
-    <string name="tab_playlist">Playlist</string>
+    <string name="tab_playlists">Playlists</string>
     <string name="tab_settings">Settings</string>
 </resources>
