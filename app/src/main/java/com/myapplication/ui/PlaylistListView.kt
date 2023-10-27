@@ -7,6 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.myapplication.MusicListContent
+import com.myapplication.PlaylistListContent
 import com.myapplication.PlaylistViewModel
 
 @Composable
@@ -19,7 +20,7 @@ fun PlaylistListView(
         modifier = modifier
             .fillMaxSize()
     ) {
-        PlaylistListView(modifier, playlistViewModel, selectedDestination)
+        PlaylistListContent(modifier, playlistViewModel, selectedDestination)
     }
 }
 
