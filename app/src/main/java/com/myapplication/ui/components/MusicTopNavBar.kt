@@ -32,7 +32,7 @@ fun MusicTopNavBar(
         },
         navigationIcon = {
             if(selectedDestination.value == MusicalRoute.REMOVE){
-                IconButton(onClick = { selectedDestination.value = MusicalRoute.PLAYLIST}) {
+                IconButton(onClick = { selectedDestination.value = MusicalRoute.PLAYLISTS}) {
                     Icon(
                         imageVector = MusicalIcons.iconBack,
                         contentDescription = "Localized description"
@@ -41,7 +41,7 @@ fun MusicTopNavBar(
             }
         },
         actions = {
-            if(selectedDestination.value == MusicalRoute.PLAYLIST){
+            if(selectedDestination.value == MusicalRoute.PLAYLISTS){
                 IconButton(onClick = { selectedDestination.value = MusicalRoute.REMOVE }) {
                     Icon(
                         imageVector = MusicalIcons.iconMenuVert,

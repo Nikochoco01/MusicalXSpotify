@@ -10,7 +10,7 @@ import com.myapplication.MusicListContent
 import com.myapplication.PlaylistViewModel
 
 @Composable
-fun PlaylistView(
+fun MusicListView(
     modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
     selectedDestination: MutableState<String>
@@ -25,6 +25,6 @@ fun PlaylistView(
 
 @Preview
 @Composable
-fun PlaylistPreview(){
+fun MusicListPreview(){
 //    PlaylistView()
 }
