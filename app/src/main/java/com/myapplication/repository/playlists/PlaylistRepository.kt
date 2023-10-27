@@ -12,11 +12,9 @@ object PlaylistRepository {
     }
 
     suspend fun getPlaylists(userId: String): Flow<List<MusicalPlaylists>> = flow {
-
         val playlistsGot: MutableList<MusicalPlaylists> = mutableListOf()
-
         PhoneFilesDataSource.getPhonePlaylists().forEach { playlists: MusicalPlaylists ->  playlistsGot.add(playlists) }
-        NetworkDataSource.apiServiceCallAPi.getAllUsersPlaylists(userId)
+//        NetworkDataSource.apiServiceCallAPi.getAllUsersPlaylists(userId)
 
         emit(playlistsGot)
     }
