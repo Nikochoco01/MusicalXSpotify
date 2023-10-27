@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,10 +33,18 @@ fun MusicListContent(
                     initial = MusicalPlaylists(0, "", "", emptyList()))
 
         if(gotLiveData == null){
-            Text(text = "Playlist Null")
+            AlertDialog(
+                title = {
+                        Text(text = "No playlist")
+                },
+                text = {
+                       Text(text = "You haven't any playlist")
+                },
+                onDismissRequest = { /*TODO*/ }, confirmButton = { /*TODO*/ }
+            )
         }
         else{
-            if(selectedDestination.value == MusicalRoute.REMOVE)
+            if(selectedDestination.value == MusicalRoute.REMOVE_MUSICS)
                 MusicListRemove(modifier,gotLiveData)
             else
                 MusicList(modifier, gotLiveData)
