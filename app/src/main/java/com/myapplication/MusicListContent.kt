@@ -14,7 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.myapplication.model.Playlists
+import com.myapplication.model.MusicalPlaylists
 import com.myapplication.ui.components.MusicListItem
 import com.myapplication.ui.components.MusicListItemSelected
 
@@ -29,7 +29,7 @@ fun MusicListContent(
     }
     Box(modifier = modifier.fillMaxSize()){
         val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(
-                    initial = Playlists(0, "", "", emptyList()))
+                    initial = MusicalPlaylists(0, "", "", emptyList()))
 
         if(gotLiveData == null){
             Text(text = "Playlist Null")
@@ -46,7 +46,7 @@ fun MusicListContent(
 @Composable
 fun MusicList(
     modifier: Modifier,
-    playlist : Playlists
+    playlist : MusicalPlaylists
 ){
     LazyColumn(
         modifier = modifier.padding(16.dp),
@@ -60,7 +60,7 @@ fun MusicList(
 @Composable
 fun MusicListRemove(
     modifier: Modifier,
-    playlist : Playlists
+    playlist : MusicalPlaylists
 ){
     LazyColumn(
         modifier = modifier.padding(16.dp),

@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myapplication.model.Playlists
+import com.myapplication.model.MusicalPlaylists
 import com.myapplication.repository.playlists.PlaylistRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel : ViewModel(){
-    private var _phoneFileLiveData : MutableLiveData<Playlists> = MutableLiveData<Playlists>()
-    val phoneFileLiveData : LiveData<Playlists> = _phoneFileLiveData
+    private var _phoneFileLiveData : MutableLiveData<MusicalPlaylists> = MutableLiveData<MusicalPlaylists>()
+    val phoneFileLiveData : LiveData<MusicalPlaylists> = _phoneFileLiveData
 
     fun fetchPhoneFilePlaylist(id: Int){
         Log.e("Test Call" , "CALL");
