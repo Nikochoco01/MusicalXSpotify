@@ -1,7 +1,7 @@
 package com.myapplication.dataSource.phoneFile
 
 import com.myapplication.model.Musics
-import com.myapplication.model.Playlists
+import com.myapplication.model.MusicalPlaylists
 
 object PhoneFilesDataSource {
     private val musics = arrayListOf(
@@ -18,9 +18,14 @@ object PhoneFilesDataSource {
         Musics(11, "", "music11", "1er", "Android", "20/10/2023", "04:00:00"),
         Musics(12, "", "music12", "1er", "Android", "20/10/2023", "04:00:00")
     )
-    private val playlists = Playlists(1, "", "Test playlist", musics)
 
-    fun getPlaylist(): Playlists{
+    private val playlists = listOf(
+        MusicalPlaylists(1, "", "Test playlist", musics)
+    )
+    fun getPhonePlaylist(id: Int): MusicalPlaylists{
+       return playlists[id]
+    }
+    fun getPhonePlaylists(): List<MusicalPlaylists>{
         return playlists
     }
 }
