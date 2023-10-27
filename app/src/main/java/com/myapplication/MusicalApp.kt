@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.myapplication.ui.MusicalIcons
 import com.myapplication.ui.MusicListView
+import com.myapplication.ui.PlaylistListView
 import com.myapplication.ui.ReaderView
 import com.myapplication.ui.SettingsView
 import com.myapplication.ui.components.MusicTopNavBar
@@ -65,9 +66,15 @@ fun MusicalAppContent(
                 ReaderView(modifier = modifier.weight(1f))
             }
             MusicalRoute.PLAYLISTS -> {
+                PlaylistListView(modifier = modifier.weight(1f), playlistViewModel, selectedDestination)
+            }
+            MusicalRoute.REMOVE_PLAYLIST -> {
+                PlaylistListView(modifier = modifier.weight(1f), playlistViewModel, selectedDestination)
+            }
+            MusicalRoute.MUSICS -> {
                 MusicListView(modifier = modifier.weight(1f), playlistViewModel, selectedDestination)
             }
-            MusicalRoute.REMOVE -> {
+            MusicalRoute.REMOVE_MUSICS -> {
                 MusicListView(modifier = modifier.weight(1f), playlistViewModel, selectedDestination)
             }
             MusicalRoute.SETTINGS -> {
@@ -102,7 +109,9 @@ fun MusicalAppContent(
 object MusicalRoute {
     const val READER = "Reader"
     const val PLAYLISTS = "Playlists"
-    const val REMOVE = "Remove"
+    const val REMOVE_PLAYLIST = "Remove"
+    const val REMOVE_MUSICS = "Remove"
+    const val MUSICS = "Musics"
     const val SETTINGS = "Settings"
 }
 
@@ -124,7 +133,7 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         route = MusicalRoute.PLAYLISTS,
         selectedIcon = MusicalIcons.iconPlaylist,
         unselectedIcon = MusicalIcons.iconPlaylist,
-        iconTextId = R.string.tab_playlist
+        iconTextId = R.string.tab_playlists
     ),
     MusicTopLevelDestination(
         route = MusicalRoute.SETTINGS,
