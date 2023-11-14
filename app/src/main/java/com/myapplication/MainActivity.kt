@@ -14,6 +14,7 @@ import com.myapplication.ui.theme.MusicalXSpotifyTheme
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel : LoginViewModel by viewModels()
+    private val playlistViewModel : PlaylistViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -24,7 +25,8 @@ class MainActivity : ComponentActivity() {
                     color = Color(0xFF6650a4)
                 ) {
                     MusicalApp(
-                        loginViewModel
+                        loginViewModel,
+                        playlistViewModel
                     )
                 }
             }
