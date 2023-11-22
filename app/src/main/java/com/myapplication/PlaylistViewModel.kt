@@ -30,10 +30,10 @@ class PlaylistViewModel : ViewModel(){
         }
     }
 
-    fun fetchAllPlaylists(id: String){
+    fun fetchAllPlaylists(userId: String){
         Log.e("Test Call" , "CALL");
         viewModelScope.launch {
-            PlaylistRepository.getPlaylists(id)
+            PlaylistRepository.getPlaylists(userId)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }
