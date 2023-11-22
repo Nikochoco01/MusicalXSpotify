@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.myapplication.model.MusicalPlaylists
+import com.myapplication.navigation.MusicalRoute
 import com.myapplication.ui.components.MusicListItem
 import com.myapplication.ui.components.MusicListItemSelected
 
