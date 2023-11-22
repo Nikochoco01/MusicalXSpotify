@@ -27,7 +27,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
             when(backStackEntry.value?.destination?.route){
                 MusicalRoute.REMOVE_PLAYLIST -> {
                     IconButton(onClick = { navController.navigate(MusicalBarRoute.Playlist.route)}) {
-                        androidx.compose.material3.Icon(
+                        Icon(
                             imageVector = MusicalIcons.iconBack,
                             contentDescription = "Localized description"
                         )
@@ -35,7 +35,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
                 }
                 MusicalRoute.REMOVE_MUSICS -> {
                     IconButton(onClick = { navController.navigate(MusicalPlaylistDetails.Music.route)}) {
-                        androidx.compose.material3.Icon(
+                        Icon(
                             imageVector = MusicalIcons.iconBack,
                             contentDescription = "Localized description"
                         )
@@ -47,7 +47,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
             when(backStackEntry.value?.destination?.route){
                 MusicalRoute.PLAYLISTS -> {
                     IconButton(onClick = { navController.navigate(MusicalBarRoute.PlaylistRemove.route) }) {
-                        androidx.compose.material3.Icon(
+                        Icon(
                             imageVector = MusicalIcons.iconMenuVert,
                             contentDescription = "Localized description"
                         )
@@ -55,7 +55,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
                 }
                 MusicalRoute.MUSICS -> {
                     IconButton(onClick = { navController.navigate(MusicalPlaylistDetails.MusicRemove.route) }) {
-                        androidx.compose.material3.Icon(
+                        Icon(
                             imageVector = MusicalIcons.iconDelete,
                             contentDescription = "Localized description"
                         )
@@ -68,23 +68,40 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
 
 @Composable
 fun NavBottomBar(modifier: Modifier, navController: NavHostController){
-    val appScreens = listOf(
-        MusicalBarRoute.Reader,
-        MusicalBarRoute.Playlist,
-        MusicalBarRoute.Settings
-    )
     NavigationBar(modifier = modifier.fillMaxWidth()) {
         val backStackEntry = navController.currentBackStackEntryAsState()
-        appScreens.forEach { musicalDestination ->
-            NavigationBarItem(
-                icon = { Icon(musicalDestination.selectedIcon, musicalDestination.route) },
-                label = { Text(text = musicalDestination.route)},
-                selected = musicalDestination.route == backStackEntry.value?.destination?.route,
-                onClick = {navController.navigate(musicalDestination.route){
-                    popUpTo(navController.graph.findStartDestination().id)
-                    launchSingleTop = true
-                } }
-            )
-        }
+
+        // Reader Route
+        NavigationBarItem(
+            icon = { Icon(MusicalBarRoute.Reader.selectedIcon, MusicalBarRoute.Reader.route) },
+            label = { Text(text = MusicalBarRoute.Reader.routeName)},
+            selected = MusicalBarRoute.Reader.route == backStackEntry.value?.destination?.route,
+            onClick = {navController.navigate(MusicalBarRoute.Reader.route){
+                popUpTo(navController.graph.findStartDestination().id)
+                launchSingleTop = true
+            } }
+        )
+
+        // Playlists Route
+        NavigationBarItem(
+            icon = { Icon(MusicalBarRoute.Playlist.selectedIcon, MusicalBarRoute.Playlist.route) },
+            label = { Text(text = MusicalBarRoute.Playlist.routeName)},
+            selected = MusicalBarRoute.Playlist.route == backStackEntry.value?.destination?.route,
+            onClick = {navController.navigate("Playlists/1"){
+                popUpTo(navController.graph.findStartDestination().id)
+                launchSingleTop = true
+            } }
+        )
+
+        // Settings Route
+        NavigationBarItem(
+            icon = { Icon(MusicalBarRoute.Settings.selectedIcon, MusicalBarRoute.Settings.route) },
+            label = { Text(text = MusicalBarRoute.Settings.routeName)},
+            selected = MusicalBarRoute.Settings.route == backStackEntry.value?.destination?.route,
+            onClick = {navController.navigate(MusicalBarRoute.Settings.route){
+                popUpTo(navController.graph.findStartDestination().id)
+                launchSingleTop = true
+            } }
+        )
     }
 }
