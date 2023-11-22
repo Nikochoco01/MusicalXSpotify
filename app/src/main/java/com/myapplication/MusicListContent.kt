@@ -1,17 +1,14 @@
 package com.myapplication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -22,9 +19,9 @@ import com.myapplication.navigation.MusicalRoute
 import com.myapplication.ui.components.MusicListItem
 import com.myapplication.ui.components.MusicListItemSelected
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun MusicListContent(
-    modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
     navController: NavController,
     playlistId: Int
@@ -49,15 +46,14 @@ fun MusicListContent(
         }
         else{
             if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.REMOVE_MUSICS)
-                MusicListRemove(modifier,gotLiveData)
+                MusicListRemove(gotLiveData)
             else
-                MusicList(modifier, gotLiveData)
+                MusicList(gotLiveData)
         }
 }
 
 @Composable
 fun MusicList(
-    modifier: Modifier,
     playlist : MusicalPlaylists
 ){
     LazyColumn(
@@ -76,7 +72,6 @@ fun MusicList(
 
 @Composable
 fun MusicListRemove(
-    modifier: Modifier,
     playlist : MusicalPlaylists
 ){
     LazyColumn(
