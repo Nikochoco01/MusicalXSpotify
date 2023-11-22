@@ -2,6 +2,7 @@ package com.myapplication
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,9 +32,9 @@ fun MusicListContent(
     LaunchedEffect(Unit){
         playlistViewModel.fetchPhoneFilePlaylist(playlistId)
     }
-    Box(modifier = modifier.fillMaxSize()){
-        val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(
-                    initial = MusicalPlaylists(0, "", "", emptyList()))
+
+    val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(
+        initial = MusicalPlaylists(0, "", "", emptyList()))
 
         if(gotLiveData == null){
             AlertDialog(
@@ -52,7 +53,6 @@ fun MusicListContent(
             else
                 MusicList(modifier, gotLiveData)
         }
-    }
 }
 
 @Composable
@@ -61,7 +61,12 @@ fun MusicList(
     playlist : MusicalPlaylists
 ){
     LazyColumn(
-        modifier = modifier.padding(16.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)){
         items(items = playlist.tracks, key = { it.id }){
             music -> MusicListItem(music = music)
@@ -75,7 +80,12 @@ fun MusicListRemove(
     playlist : MusicalPlaylists
 ){
     LazyColumn(
-        modifier = modifier.padding(16.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)){
         items(items = playlist.tracks, key = { it.id }){
                 music -> MusicListItemSelected(music = music)
