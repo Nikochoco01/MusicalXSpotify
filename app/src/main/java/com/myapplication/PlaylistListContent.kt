@@ -3,11 +3,7 @@ package com.myapplication
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,7 +25,7 @@ import com.myapplication.ui.components.PlaylistListItemSelected
 
 @Composable
 fun PlaylistListContent(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     playlistViewModel: PlaylistViewModel,
     navController: NavController,
     userId: String
@@ -54,16 +50,15 @@ fun PlaylistListContent(
     }
     else{
         if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.REMOVE_PLAYLIST){
-            PlaylistsListRemove(modifier, navController,gotLiveData)
+            PlaylistsListRemove(navController,gotLiveData)
         }
         else
-            PlaylistsList(modifier, navController, gotLiveData)
+            PlaylistsList(navController, gotLiveData)
     }
 }
 
 @Composable
 fun PlaylistsList(
-    modifier: Modifier,
     navController: NavController,
     playlists : List<MusicalPlaylists>
 ){
@@ -75,7 +70,6 @@ fun PlaylistsList(
             end = 12.dp,
             bottom = 16.dp
         ),
-        modifier = modifier.background(Color.Red),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)){
         items(playlists){
@@ -86,13 +80,17 @@ fun PlaylistsList(
 
 @Composable
 fun PlaylistsListRemove(
-    modifier: Modifier,
     navController: NavController,
     playlists : List<MusicalPlaylists>
 ){
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp),
-        modifier = modifier.padding(16.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)){
         items(playlists){
