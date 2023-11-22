@@ -19,12 +19,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.myapplication.R
 import com.myapplication.model.MusicalPlaylists
+import com.myapplication.navigation.MusicalBarRoute
+import com.myapplication.navigation.MusicalPlaylistDetails
 
 @Composable
 fun PlaylistListItem(
     playlist: MusicalPlaylists,
+    navController: NavController,
     modifier: Modifier = Modifier
 ){
     ElevatedCard(
@@ -35,7 +39,7 @@ fun PlaylistListItem(
             .size(width = 160.dp, height = 224.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
-
+                navController.navigate(MusicalPlaylistDetails.Music.route + "/" + playlist.id)
             }
     ) {
         Column(
