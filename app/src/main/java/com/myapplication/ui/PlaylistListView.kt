@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.myapplication.MusicListContent
 import com.myapplication.PlaylistListContent
 import com.myapplication.PlaylistViewModel
@@ -14,13 +15,14 @@ import com.myapplication.PlaylistViewModel
 fun PlaylistListView(
     modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
-    selectedDestination: MutableState<String>
+    navController: NavController,
+    userId: String
 ){
     Column(
         modifier = modifier
             .fillMaxSize()
     ) {
-        PlaylistListContent(modifier, playlistViewModel, selectedDestination)
+        PlaylistListContent(modifier, playlistViewModel, navController, userId)
     }
 }
 
