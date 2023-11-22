@@ -23,7 +23,7 @@ import com.myapplication.ui.MusicalIcons
 fun NavTopBar(modifier: Modifier, navController: NavHostController){
     val backStackEntry = navController.currentBackStackEntryAsState()
     CenterAlignedTopAppBar(modifier = modifier.background(MaterialTheme.colorScheme.surface),
-        title = { backStackEntry.value?.destination?.route?.let { Text(it) } },
+        title = { backStackEntry.value?.destination?.route.toString()},
         navigationIcon = {
             when(backStackEntry.value?.destination?.route){
                 MusicalRoute.REMOVE_PLAYLIST -> {
