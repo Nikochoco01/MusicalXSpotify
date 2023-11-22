@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.ui.components.MusicListItem
 import com.myapplication.ui.components.MusicListItemSelected
@@ -29,10 +30,11 @@ import com.myapplication.ui.components.PlaylistListItemSelected
 fun PlaylistListContent(
     modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
-    selectedDestination: MutableState<String>
+    navController: NavController,
+    userId: String
 ){
     LaunchedEffect(Unit){
-        playlistViewModel.fetchAllPlaylists("")
+        playlistViewModel.fetchAllPlaylists(userId)
     }
     Box(modifier = modifier.fillMaxSize()){
         val gotLiveData by playlistViewModel.playlistsLiveData.observeAsState(
@@ -51,7 +53,7 @@ fun PlaylistListContent(
             )
         }
         else{
-            if(selectedDestination.value == MusicalRoute.REMOVE_PLAYLIST)
+            if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.REMOVE_PLAYLIST)
                 PlaylistsListRemove(modifier,gotLiveData)
             else
                 PlaylistsList(modifier, gotLiveData)
