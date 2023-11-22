@@ -30,26 +30,26 @@ fun NavigationGraph(
         composable(MusicalBarRoute.Playlist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-            ?.let { PlaylistListView(modifier, playlistViewModel, navController, it) }
+            ?.let { PlaylistListView(playlistViewModel, navController, it) }
         }
         composable(MusicalBarRoute.PlaylistRemove.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-            ?.let { PlaylistListView(modifier, playlistViewModel, navController, it) }
+            ?.let { PlaylistListView(playlistViewModel, navController, it) }
         }
 
-        navigation(startDestination = MusicalBarRoute.Playlist.route, route = MusicalPlaylistDetails.Music.route){
-            composable(MusicalPlaylistDetails.Music.route,
-                arguments = listOf(navArgument("playlistID") { type = NavType.IntType })){
-                    backStackEntry -> backStackEntry.arguments?.getString("playlistID")
-                ?.let { MusicListView(modifier, playlistViewModel, navController, it.toInt()) }
-            }
-            composable(MusicalPlaylistDetails.MusicRemove.route,
-                arguments = listOf(navArgument("playlistID") { type = NavType.IntType })){
-                    backStackEntry -> backStackEntry.arguments?.getString("playlistID")
-                ?.let { MusicListView(modifier, playlistViewModel, navController, it.toInt()) }
-            }
-        }
+//        navigation(startDestination = MusicalBarRoute.Playlist.route, route = MusicalPlaylistDetails.Music.route){
+//            composable(MusicalPlaylistDetails.Music.route,
+//                arguments = listOf(navArgument("playlistID") { type = NavType.IntType })){
+//                    backStackEntry -> backStackEntry.arguments?.getString("playlistID")
+//                ?.let { MusicListView(playlistViewModel, navController, it.toInt()) }
+//            }
+//            composable(MusicalPlaylistDetails.MusicRemove.route,
+//                arguments = listOf(navArgument("playlistID") { type = NavType.IntType })){
+//                    backStackEntry -> backStackEntry.arguments?.getString("playlistID")
+//                ?.let { MusicListView(playlistViewModel, navController, it.toInt()) }
+//            }
+//        }
 
         composable(MusicalBarRoute.Settings.route){
             SettingsView(modifier)
