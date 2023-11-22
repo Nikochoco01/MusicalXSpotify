@@ -9,12 +9,11 @@ import com.myapplication.PlaylistViewModel
 
 @Composable
 fun MusicListView(
-    modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
     navController: NavController,
     playlistId: Int
 ){
-    MusicListContent(modifier, playlistViewModel, navController, playlistId)
+    MusicListContent(playlistViewModel, navController, playlistId)
 }
 
 @Preview

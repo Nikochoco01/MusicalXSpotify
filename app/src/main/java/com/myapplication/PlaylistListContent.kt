@@ -25,7 +25,6 @@ import com.myapplication.ui.components.PlaylistListItemSelected
 
 @Composable
 fun PlaylistListContent(
-    modifier: Modifier,
     playlistViewModel: PlaylistViewModel,
     navController: NavController,
     userId: String
