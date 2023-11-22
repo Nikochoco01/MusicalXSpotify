@@ -1,5 +1,6 @@
 package com.myapplication.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ fun PlaylistListItem(
     navController: NavController,
     modifier: Modifier = Modifier
 ){
+    Log.e("PLAYLIST", playlist.id.toString())
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -39,7 +41,9 @@ fun PlaylistListItem(
             .size(width = 160.dp, height = 224.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
-                navController.navigate(MusicalPlaylistDetails.Music.route + "/" + playlist.id)
+                var route: String = "${MusicalPlaylistDetails.Music.route}"
+                    .replace("{playlistID}", "${playlist.id}")
+                navController.navigate(route)
             }
     ) {
         Column(
