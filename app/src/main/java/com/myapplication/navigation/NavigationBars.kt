@@ -1,5 +1,6 @@
 package com.myapplication.navigation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -53,8 +54,33 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
                         )
                     }
                 }
+                MusicalRoute.REMOVE_PLAYLIST -> {
+                    IconButton(onClick = { navController.navigate(MusicalBarRoute.Playlist.route) }) {
+                        Icon(
+                            imageVector = MusicalIcons.iconDelete,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
                 MusicalRoute.MUSICS -> {
-                    IconButton(onClick = { navController.navigate(MusicalPlaylistDetails.MusicRemove.route) }) {
+                    IconButton(onClick = {
+                        Log.e("ROUTE" , backStackEntry.value?.destination?.route.toString())
+                        backStackEntry.value?.arguments?.toString()?.let { Log.e("ROUTE" , it) }
+                        Log.e("ROUTE" , MusicalPlaylistDetails.MusicRemove.route.toString())
+                        navController.navigate(MusicalPlaylistDetails.MusicRemove.route)
+                    }) {
+                        Icon(
+                            imageVector = MusicalIcons.iconMenuVert,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
+                MusicalRoute.REMOVE_MUSICS -> {
+                    IconButton(onClick = {
+                        Log.e("ROUTE" , backStackEntry.value?.destination?.route.toString())
+                        backStackEntry.value?.arguments?.toString()?.let { Log.e("ROUTE" , it) }
+                        //navController.navigate(MusicalPlaylistDetails.Music.route)
+                        }) {
                         Icon(
                             imageVector = MusicalIcons.iconDelete,
                             contentDescription = "Localized description"
@@ -87,7 +113,7 @@ fun NavBottomBar(modifier: Modifier, navController: NavHostController){
             icon = { Icon(MusicalBarRoute.Playlist.selectedIcon, MusicalBarRoute.Playlist.route) },
             label = { Text(text = MusicalBarRoute.Playlist.routeName)},
             selected = MusicalBarRoute.Playlist.route == backStackEntry.value?.destination?.route,
-            onClick = {navController.navigate("Playlists/1"){
+            onClick = {navController.navigate("1/playlists"){
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             } }

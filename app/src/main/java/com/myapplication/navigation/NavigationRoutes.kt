@@ -6,14 +6,12 @@ import com.myapplication.ui.MusicalIcons
 
 
 object MusicalRoute {
-    const val READER = "Reader"
-    const val PLAYLISTS = "Playlists"
-    const val REMOVE_PLAYLIST = "Playlists"
-    const val MUSICS = "Musics"
-    const val REMOVE_MUSICS = "Musics"
+    const val READER = "reader"
+    const val PLAYLISTS = "{userID}/playlists"
+    const val REMOVE_PLAYLIST = "remove/{userID}/playlists"
+    const val MUSICS = "{playlistID}/musics"
+    const val REMOVE_MUSICS = "remove/{playlistID}/musics"
     const val SETTINGS = "Settings"
-    const val PLAYLISTS_PARAMETER = "/{userID}"
-    const val MUSICS_PARAMETER = "/{playlistID}"
 }
 object MusicalRouteName {
     const val READER_NAME = "Reader"
