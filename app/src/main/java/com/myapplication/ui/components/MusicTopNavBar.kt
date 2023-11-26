@@ -31,7 +31,7 @@ fun MusicTopNavBar(
             )
         },
         navigationIcon = {
-            if(selectedDestination.value == MusicalRoute.REMOVE){
+            if(selectedDestination.value == MusicalRoute.REMOVE_PLAYLIST){
                 IconButton(onClick = { selectedDestination.value = MusicalRoute.PLAYLISTS}) {
                     Icon(
                         imageVector = MusicalIcons.iconBack,
@@ -42,14 +42,14 @@ fun MusicTopNavBar(
         },
         actions = {
             if(selectedDestination.value == MusicalRoute.PLAYLISTS){
-                IconButton(onClick = { selectedDestination.value = MusicalRoute.REMOVE }) {
+                IconButton(onClick = { selectedDestination.value = MusicalRoute.REMOVE_PLAYLIST }) {
                     Icon(
                         imageVector = MusicalIcons.iconMenuVert,
                         contentDescription = "Localized description"
                     )
                 }
             }
-            else if(selectedDestination.value == MusicalRoute.REMOVE){
+            else if(selectedDestination.value == MusicalRoute.REMOVE_MUSICS){
                 IconButton(onClick = { /* doSomething() */ }) {
                     Icon(
                         imageVector = MusicalIcons.iconDelete,
