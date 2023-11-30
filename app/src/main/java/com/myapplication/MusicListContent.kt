@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.myapplication.model.MusicalPlaylists
@@ -35,20 +34,17 @@ fun MusicListContent(
 
         if(gotLiveData == null){
             AlertDialog(
-                title = {
-                        Text(text = "No playlist")
-                },
-                text = {
-                       Text(text = "You haven't any playlist")
-                },
+                title = { Text(text = "No playlist") },
+                text = { Text(text = "You haven't any playlist") },
                 onDismissRequest = { /*TODO*/ }, confirmButton = { /*TODO*/ }
             )
         }
         else{
-            if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.REMOVE_MUSICS)
+            if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.MUSICS_REMOVE)
                 MusicListRemove(gotLiveData)
-            else
+            else{
                 MusicList(gotLiveData)
+            }
         }
 }
 

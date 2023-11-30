@@ -1,10 +1,8 @@
 package com.myapplication
 
-import android.util.Log
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -14,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.myapplication.model.MusicalPlaylists
@@ -38,19 +34,14 @@ fun PlaylistListContent(
 
     if(gotLiveData == null){
         AlertDialog(
-            title = {
-                Text(text = "No playlist")
-            },
-            text = {
-                Text(text = "You haven't any playlist")
-            },
+            title = { Text(text = "No playlist") },
+            text = { Text(text = "You haven't any playlist") },
             onDismissRequest = { /*TODO*/ }, confirmButton = { /*TODO*/ }
         )
     }
     else{
-        if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.REMOVE_PLAYLIST){
+        if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.PLAYLIST_REMOVE)
             PlaylistsListRemove(navController,gotLiveData)
-        }
         else
             PlaylistsList(navController, gotLiveData)
     }
