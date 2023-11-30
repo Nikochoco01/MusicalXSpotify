@@ -7,10 +7,10 @@ import com.myapplication.ui.MusicalIcons
 
 object MusicalRoute {
     const val READER = "reader"
-    const val PLAYLISTS = "{userID}/playlists"
-    const val REMOVE_PLAYLIST = "remove/{userID}/playlists"
-    const val MUSICS = "{playlistID}/musics"
-    const val REMOVE_MUSICS = "remove/{playlistID}/musics"
+    const val USER_PLAYLISTS = "user/{userID}/playlists"
+    const val PLAYLIST_REMOVE = "user/{userID}/playlists/remove"
+    const val PLAYLIST_MUSICS = "playlists/{playlistID}/musics"
+    const val MUSICS_REMOVE = "playlists/{playlistID}/musics/remove"
     const val SETTINGS = "Settings"
 }
 object MusicalRouteName {
@@ -22,16 +22,20 @@ object MusicalRouteName {
     const val SETTINGS_NAME = "Settings"
 }
 
-sealed class  MusicalPlaylistDetails(
+sealed class MusicalInternalAppRoute (
     val route: String,
     var idPlaylist: Int? = null
 ){
-    object Music: MusicalPlaylistDetails(
-        route = MusicalRoute.MUSICS,
+    object LoadPlaylist: MusicalInternalAppRoute(
+        route = MusicalRoute.PLAYLIST_MUSICS,
         idPlaylist = null
     )
-    object MusicRemove: MusicalPlaylistDetails(
-        route = MusicalRoute.REMOVE_MUSICS,
+    object RemoveMusic: MusicalInternalAppRoute(
+        route = MusicalRoute.MUSICS_REMOVE,
+        idPlaylist = null
+    )
+    object RemovePlaylist: MusicalInternalAppRoute(
+        route = MusicalRoute.PLAYLIST_REMOVE,
         idPlaylist = null
     )
 }
@@ -45,25 +49,19 @@ sealed class MusicalBarRoute(
     object Reader: MusicalBarRoute(
         routeName = MusicalRouteName.READER_NAME,
         route = MusicalRoute.READER,
-        selectedIcon = MusicalIcons.iconReader,
+        selectedIcon = MusicalIcons.iconReaderSelected,
         unselectedIcon = MusicalIcons.iconReader
     )
     object Playlist: MusicalBarRoute(
         routeName = MusicalRouteName.PLAYLISTS_NAME,
-        route = MusicalRoute.PLAYLISTS,
-        selectedIcon = MusicalIcons.iconPlaylist,
-        unselectedIcon = MusicalIcons.iconPlaylist
-    )
-    object PlaylistRemove: MusicalBarRoute(
-        routeName = MusicalRouteName.REMOVE_PLAYLIST_NAME,
-        route = MusicalRoute.REMOVE_PLAYLIST,
-        selectedIcon = MusicalIcons.iconPlaylist,
+        route = MusicalRoute.USER_PLAYLISTS,
+        selectedIcon = MusicalIcons.iconPlaylistSelected,
         unselectedIcon = MusicalIcons.iconPlaylist
     )
     object Settings: MusicalBarRoute(
         routeName = MusicalRouteName.SETTINGS_NAME,
         route = MusicalRoute.SETTINGS,
-        selectedIcon = MusicalIcons.iconSettings,
+        selectedIcon = MusicalIcons.iconSettingsSelected,
         unselectedIcon = MusicalIcons.iconSettings
     )
 }
