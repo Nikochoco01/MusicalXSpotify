@@ -23,17 +23,17 @@ object PhoneFilesDataSource {
         MusicalPlaylists(1, "", "Test playlist", musics),
         MusicalPlaylists(2, "", "Test playlist 2", musics),
         MusicalPlaylists(3, "", "Test playlist 3", musics),
-        MusicalPlaylists(4, "", "Test playlist 3", musics),
-        MusicalPlaylists(5, "", "Test playlist 3", musics),
-        MusicalPlaylists(6, "", "Test playlist 3", musics),
-        MusicalPlaylists(7, "", "Test playlist 3", musics),
-        MusicalPlaylists(8, "", "Test playlist 3", musics),
-        MusicalPlaylists(9, "", "Test playlist 3", musics)
+        MusicalPlaylists(4, "", "Test playlist 4", musics),
+        MusicalPlaylists(5, "", "Test playlist 5", musics),
+        MusicalPlaylists(6, "", "Test playlist 6", musics),
+        MusicalPlaylists(7, "", "Test playlist 7", musics),
+        MusicalPlaylists(8, "", "Test playlist 8", musics),
+        MusicalPlaylists(9, "", "Test playlist 9", musics)
     )
-    fun getPhonePlaylist(id: Int): MusicalPlaylists{
-       return playlists[id]
+    fun getPhonePlaylistByID(id: Int): MusicalPlaylists{
+       return playlists[id - 1]
     }
-    fun getPhonePlaylists(): List<MusicalPlaylists>{
+    fun getAllPhonePlaylists(): List<MusicalPlaylists>{
         return playlists
     }
 }
