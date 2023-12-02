@@ -16,25 +16,29 @@ object MusicalRoute {
 object MusicalRouteName {
     const val READER_NAME = "Reader"
     const val PLAYLISTS_NAME = "Playlists"
-    const val REMOVE_PLAYLIST_NAME = "Remove"
+    const val REMOVE_PLAYLIST_NAME = "Remove Playlists"
     const val MUSICS_NAME = "Musics"
-    const val REMOVE_MUSICS_NAME = "Remove"
+    const val REMOVE_MUSICS_NAME = "Remove Musics"
     const val SETTINGS_NAME = "Settings"
 }
 
 sealed class MusicalInternalAppRoute (
+    val routeName: String,
     val route: String,
     var idPlaylist: Int? = null
 ){
     object LoadPlaylist: MusicalInternalAppRoute(
+        routeName = MusicalRouteName.MUSICS_NAME,
         route = MusicalRoute.PLAYLIST_MUSICS,
         idPlaylist = null
     )
     object RemoveMusic: MusicalInternalAppRoute(
+        routeName = MusicalRouteName.REMOVE_MUSICS_NAME,
         route = MusicalRoute.MUSICS_REMOVE,
         idPlaylist = null
     )
     object RemovePlaylist: MusicalInternalAppRoute(
+        routeName = MusicalRouteName.REMOVE_PLAYLIST_NAME,
         route = MusicalRoute.PLAYLIST_REMOVE,
         idPlaylist = null
     )
