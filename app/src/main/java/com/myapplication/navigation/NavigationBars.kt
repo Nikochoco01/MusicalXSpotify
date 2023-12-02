@@ -1,6 +1,5 @@
 package com.myapplication.navigation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,7 +22,18 @@ import com.myapplication.ui.MusicalIcons
 fun NavTopBar(modifier: Modifier, navController: NavHostController){
     val backStackEntry = navController.currentBackStackEntryAsState()
     CenterAlignedTopAppBar(modifier = modifier.background(MaterialTheme.colorScheme.surface),
-        title = { backStackEntry.value?.destination?.route.toString()},
+        title = {
+            var text = when(backStackEntry.value?.destination?.route){
+                MusicalInternalAppRoute.RemovePlaylist.route -> MusicalInternalAppRoute.RemovePlaylist.routeName
+                MusicalInternalAppRoute.RemoveMusic.route -> MusicalInternalAppRoute.RemoveMusic.routeName
+                MusicalInternalAppRoute.LoadPlaylist.route -> MusicalInternalAppRoute.LoadPlaylist.routeName
+                MusicalBarRoute.Reader.route -> MusicalBarRoute.Reader.routeName
+                MusicalBarRoute.Playlist.route -> MusicalBarRoute.Playlist.routeName
+                MusicalBarRoute.Settings.route -> MusicalBarRoute.Settings.routeName
+                else -> "Title no undefined"
+            }
+            Text(text)
+                },
         navigationIcon = {
             when(backStackEntry.value?.destination?.route){
                 MusicalInternalAppRoute.RemovePlaylist.route -> {
