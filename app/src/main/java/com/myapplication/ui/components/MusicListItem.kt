@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +37,8 @@ fun MusicListItem(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         leadingContent = {
-            MusicPicture(drawableResource = R.drawable.picture_1, description = "music picture")
+            MusicalPicture(modifier.size(56.dp).clip(RoundedCornerShape(24)),
+                drawableResource = R.drawable.picture_1_square, description = "music picture")
         },
         headlineText = {
             Text(text = music.name,

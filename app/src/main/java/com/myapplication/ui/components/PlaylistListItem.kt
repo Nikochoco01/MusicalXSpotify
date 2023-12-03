@@ -44,7 +44,8 @@ fun PlaylistListItem(
             .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            PlaylistPicture(drawableResource = R.drawable.picture_1, description = "playlist picture")
+            MusicalPicture(modifier.size(128.dp).clip(RoundedCornerShape(16.dp)),
+                drawableResource = R.drawable.picture_1_square, description = "playlist picture")
             Text(
                 text = playlist.name,
                 fontSize = 24.sp,
