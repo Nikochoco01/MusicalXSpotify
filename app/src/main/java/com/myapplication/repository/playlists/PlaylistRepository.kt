@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.flow
 
 object PlaylistRepository {
     suspend fun getPlaylist(id: Int) : Flow<MusicalPlaylists> = flow {
-        emit(PhoneFilesDataSource.getPhonePlaylist(id))
+        emit(PhoneFilesDataSource.getPhonePlaylistByID(id))
     }
 
     suspend fun getPlaylists(userId: String): Flow<List<MusicalPlaylists>> = flow {
         val playlistsGot: MutableList<MusicalPlaylists> = mutableListOf()
-        PhoneFilesDataSource.getPhonePlaylists().forEach { playlists: MusicalPlaylists ->  playlistsGot.add(playlists) }
+        PhoneFilesDataSource.getAllPhonePlaylists().forEach { playlists: MusicalPlaylists ->  playlistsGot.add(playlists) }
 //        NetworkDataSource.apiServiceCallAPi.getAllUsersPlaylists(userId)
 
         emit(playlistsGot)

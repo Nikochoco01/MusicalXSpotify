@@ -25,15 +25,15 @@ class PlaylistViewModel : ViewModel(){
                 }
                 .collect{
                     _phoneFileLiveData.postValue(it)
-                    Log.e("Test Call" , "CALL");
+                    Log.e("Test Call" , "CALL Music");
                 }
         }
     }
 
-    fun fetchAllPlaylists(id: String){
-        Log.e("Test Call" , "CALL");
+    fun fetchAllPlaylists(userId: String){
+        Log.e("Test Call" , "CALL Playlist");
         viewModelScope.launch {
-            PlaylistRepository.getPlaylists(id)
+            PlaylistRepository.getPlaylists(userId)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }

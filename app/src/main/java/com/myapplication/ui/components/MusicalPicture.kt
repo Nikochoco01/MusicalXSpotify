@@ -14,30 +14,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MusicPicture(
+fun MusicalPicture(
+    modifier: Modifier,
     drawableResource: Int,
-    description: String,
-    modifier: Modifier = Modifier
-) {
+    description: String
+){
     Image(
-        modifier = modifier
-            .size(56.dp)
-            .clip(RoundedCornerShape(24)),
+        modifier = modifier,
         painter = painterResource(id = drawableResource),
         contentDescription = description,
-    )
-}
-
-@Composable
-fun PlaylistPicture(
-    drawableResource: Int,
-    description: String,
-    modifier: Modifier = Modifier
-) {
-    Image(
-        modifier = modifier
-            .size(128.dp),
-        painter = painterResource(id = drawableResource),
-        contentDescription = description
     )
 }
