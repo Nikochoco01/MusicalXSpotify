@@ -1,8 +1,7 @@
 package com.myapplication.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.myapplication.R
-import com.myapplication.ui.MusicalIcons
+import com.myapplication.ui.utils.MusicalIcons
 
 
 object MusicalRoute {

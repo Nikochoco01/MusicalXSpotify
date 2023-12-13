@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.myapplication.ui.MusicalIcons
+import com.myapplication.ui.utils.MusicalIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
