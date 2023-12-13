@@ -1,6 +1,5 @@
 package com.myapplication.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.myapplication.R
@@ -56,7 +52,8 @@ fun PlaylistListItemSelected(
         Column(modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            PlaylistPicture(drawableResource = R.drawable.picture_1, description = "playlist picture")
+            MusicalPicture(modifier.size(128.dp).clip(RoundedCornerShape(16.dp)),
+                drawableResource = R.drawable.picture_1_square, description = "playlist picture")
             Text(
                 text = playlist.name,
                 fontSize = 24.sp,

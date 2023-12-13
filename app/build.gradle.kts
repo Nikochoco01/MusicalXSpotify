@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("kotlin-kapt")
 }
 
 android {
@@ -30,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -70,8 +73,38 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
 
+    // ROOM
+    val roomVersion = "2.5.0"
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$roomVersion")
+    // To use Kotlin Symbol Processing (KSP)
+//    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // optional - RxJava2 support for Room
+    implementation("androidx.room:room-rxjava2:$roomVersion")
+
+    // optional - RxJava3 support for Room
+    implementation("androidx.room:room-rxjava3:$roomVersion")
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation("androidx.room:room-guava:$roomVersion")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$roomVersion")
+
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$roomVersion")
+
+
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$2.4.0")
-    implementation ("androidx.navigation:navigation-compose:2.4.0-alpha06")
+    implementation ("androidx.navigation:navigation-compose:2.7.5")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose: 2.5.1")
     implementation("androidx.glance:glance-appwidget:1.0.0")
     implementation("androidx.glance:glance:1.0.0")

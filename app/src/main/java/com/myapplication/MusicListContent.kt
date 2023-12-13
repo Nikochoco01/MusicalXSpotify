@@ -1,64 +1,64 @@
 package com.myapplication
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.myapplication.model.MusicalPlaylists
+import com.myapplication.navigation.MusicalRoute
 import com.myapplication.ui.components.MusicListItem
 import com.myapplication.ui.components.MusicListItemSelected
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun MusicListContent(
-    modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
-    selectedDestination: MutableState<String>
+    navController: NavController,
+    playlistId: Int
 ){
     LaunchedEffect(Unit){
-        playlistViewModel.fetchPhoneFilePlaylist(1)
+        playlistViewModel.fetchPhoneFilePlaylist(playlistId)
     }
-    Box(modifier = modifier.fillMaxSize()){
-        val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(
-                    initial = MusicalPlaylists(0, "", "", emptyList()))
+
+    val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(
+        initial = MusicalPlaylists(0, "", "", emptyList()))
 
         if(gotLiveData == null){
             AlertDialog(
-                title = {
-                        Text(text = "No playlist")
-                },
-                text = {
-                       Text(text = "You haven't any playlist")
-                },
+                title = { Text(text = "No playlist") },
+                text = { Text(text = "You haven't any playlist") },
                 onDismissRequest = { /*TODO*/ }, confirmButton = { /*TODO*/ }
             )
         }
         else{
-            if(selectedDestination.value == MusicalRoute.REMOVE_MUSICS)
-                MusicListRemove(modifier,gotLiveData)
-            else
-                MusicList(modifier, gotLiveData)
+            if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.MUSICS_REMOVE)
+                MusicListRemove(gotLiveData)
+            else{
+                MusicList(gotLiveData)
+            }
         }
-    }
 }
 
 @Composable
 fun MusicList(
-    modifier: Modifier,
     playlist : MusicalPlaylists
 ){
     LazyColumn(
-        modifier = modifier.padding(16.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)){
         items(items = playlist.tracks, key = { it.id }){
             music -> MusicListItem(music = music)
@@ -68,11 +68,15 @@ fun MusicList(
 
 @Composable
 fun MusicListRemove(
-    modifier: Modifier,
     playlist : MusicalPlaylists
 ){
     LazyColumn(
-        modifier = modifier.padding(16.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp)){
         items(items = playlist.tracks, key = { it.id }){
                 music -> MusicListItemSelected(music = music)
