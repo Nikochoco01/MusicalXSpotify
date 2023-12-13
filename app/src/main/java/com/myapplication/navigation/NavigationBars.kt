@@ -108,7 +108,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
 }
 
 @Composable
-fun NavBottomBar(modifier: Modifier, navController: NavHostController){
+fun NavBottomBar(modifier: Modifier, navController: NavHostController, userID : Int){
     NavigationBar(modifier = modifier.fillMaxWidth()) {
         val backStackEntry = navController.currentBackStackEntryAsState()
 
@@ -138,7 +138,7 @@ fun NavBottomBar(modifier: Modifier, navController: NavHostController){
                     MusicalInternalAppRoute.RemoveMusic.route -> true
                 else -> false
             },
-            onClick = {navController.navigate("user/1/playlists"){
+            onClick = {navController.navigate("user/$userID/playlists"){
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             } },
