@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
-import com.myapplication.viewModels.LoginViewModel
+import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
+import com.myapplication.viewModels.UsersViewModel
 
 class MainActivity : ComponentActivity() {
-    private val loginViewModel : LoginViewModel by viewModels()
+    private val spotifyAPIViewModel : SpotifyAPIViewModel by viewModels()
     private val playlistViewModel : PlaylistViewModel by viewModels()
+    private val usersViewModel : UsersViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,8 +29,9 @@ class MainActivity : ComponentActivity() {
                     color = Color(0xFF6650a4)
                 ) {
                     MusicalApp(
-                        loginViewModel,
-                        playlistViewModel
+                        spotifyAPIViewModel,
+                        playlistViewModel,
+                        usersViewModel
                     )
                 }
             }
