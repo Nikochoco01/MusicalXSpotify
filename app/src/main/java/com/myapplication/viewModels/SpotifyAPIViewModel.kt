@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class LoginViewModel : ViewModel() {
+class SpotifyAPIViewModel : ViewModel() {
     private var _spotifyTokenLiveData : MutableLiveData<Response<AccessToken>?> = MutableLiveData<Response<AccessToken>?>()
     val spotifyTokenLiveData : LiveData<Response<AccessToken>?> = _spotifyTokenLiveData
 
