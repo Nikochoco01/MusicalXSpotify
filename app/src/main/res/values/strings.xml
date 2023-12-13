@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">MusicalXSpotify</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="login_menu">Login</string>
+    <string name="tab_reader">Reader</string>
+    <string name="tab_playlists">Playlists</string>
+    <string name="tab_settings">Settings</string>
+    <string name="picture_description">Music picture</string>
+    <string name="previous_button">Previous button</string>
+    <string name="play_pause_button">Play/Pause button</string>
+    <string name="next_button">Next button</string>
+    <string name="timer_reader">00:00:00</string>
+    <string name="title_label">Music Title</string>
+    <string name="artist_label">Music Artist</string>
 </resources>
