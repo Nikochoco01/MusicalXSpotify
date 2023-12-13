@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,14 +23,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import com.myapplication.navigation.MusicalBarRoute
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
+import com.myapplication.viewModels.UsersViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun  SubscribeView(
+    usersViewModel: UsersViewModel,
     modifier: Modifier,
     navController: NavController
 ){
@@ -37,13 +44,18 @@ fun  SubscribeView(
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
-    Column(modifier.fillMaxSize()
-        .padding(16.dp),
+    Column(
+        modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(MusicalInternalAppRoute.Subscribe.routeName)
-        Column (modifier.fillMaxWidth().height(248.dp),
+        Column (
+            modifier
+                .fillMaxWidth()
+                .height(248.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally){
             OutlinedTextField(
@@ -68,18 +80,30 @@ fun  SubscribeView(
                 placeholder = { Text(text = "Enter your password") }
             )
         }
-        Row (modifier.fillMaxWidth().height(48.dp),
+        Row (
+            modifier
+                .fillMaxWidth()
+                .height(48.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
-            OutlinedButton(onClick = { navController.navigate(MusicalInternalAppRoute.Login.route) }, modifier.width(144.dp).height(48.dp)) {
+            OutlinedButton(onClick = { navController.navigate(MusicalInternalAppRoute.Login.route) },
+                modifier
+                    .width(144.dp)
+                    .height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconClose, contentDescription = "Cancel icon")
                 Text(text = "Cancel")
             }
             Button(onClick = {
+                GlobalScope.launch {
+                    usersViewModel.CreateMusicalUser(pseudo, email, password)
+                }
                 val isSubscribe = true
                 if(isSubscribe){
                     navController.navigate(MusicalBarRoute.Reader.route)
                 }
-            }, modifier.width(144.dp).height(48.dp)) {
+            },
+                modifier
+                    .width(144.dp)
+                    .height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconAdd, contentDescription = "Subscribe icon")
                 Text(text = "Subscribe")
             }
