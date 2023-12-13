@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
+import com.myapplication.viewModels.LoginViewModel
+import com.myapplication.viewModels.PlaylistViewModel
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel : LoginViewModel by viewModels()

@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.myapplication.PlaylistViewModel
+import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.navigation.MusicalRoute
 import com.myapplication.ui.components.MusicListItem
