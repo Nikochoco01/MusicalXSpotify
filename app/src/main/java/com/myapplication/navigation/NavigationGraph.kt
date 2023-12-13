@@ -7,21 +7,31 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.myapplication.ui.views.LoginView
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.ui.views.MusicListView
 import com.myapplication.ui.views.PlaylistListView
 import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
+import com.myapplication.ui.views.SubscribeView
+import com.myapplication.viewModels.UsersViewModel
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
-    playlistViewModel: PlaylistViewModel
+    playlistViewModel: PlaylistViewModel,
+    usersViewModel: UsersViewModel
 ){
     NavHost(navController = navController,
-        startDestination = MusicalBarRoute.Reader.route,
+        startDestination = MusicalInternalAppRoute.Login.route,
         modifier = modifier){
+        composable(MusicalInternalAppRoute.Login.route){
+            LoginView(usersViewModel, modifier, navController)
+        }
+        composable(MusicalInternalAppRoute.Subscribe.route){
+            SubscribeView(usersViewModel, modifier, navController)
+        }
         composable(MusicalBarRoute.Reader.route){
             ReaderView(modifier)
         }
