@@ -7,11 +7,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.myapplication.PlaylistViewModel
-import com.myapplication.ui.MusicListView
-import com.myapplication.ui.PlaylistListView
-import com.myapplication.ui.ReaderView
-import com.myapplication.ui.SettingsView
+import com.myapplication.viewModels.PlaylistViewModel
+import com.myapplication.ui.views.MusicListView
+import com.myapplication.ui.views.PlaylistListView
+import com.myapplication.ui.views.ReaderView
+import com.myapplication.ui.views.SettingsView
 
 @Composable
 fun NavigationGraph(

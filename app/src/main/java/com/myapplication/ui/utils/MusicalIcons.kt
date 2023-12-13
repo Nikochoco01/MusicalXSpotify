@@ -1,4 +1,4 @@
-package com.myapplication.ui
+package com.myapplication.ui.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.ui.graphics.vector.ImageVector

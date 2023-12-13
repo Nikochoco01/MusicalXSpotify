@@ -1,4 +1,4 @@
-package com.myapplication
+package com.myapplication.ui.views
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.navigation.MusicalRoute
 import com.myapplication.ui.components.MusicListItem
@@ -20,7 +21,7 @@ import com.myapplication.ui.components.MusicListItemSelected
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun MusicListContent(
+fun MusicListView(
     playlistViewModel: PlaylistViewModel,
     navController: NavController,
     playlistId: Int

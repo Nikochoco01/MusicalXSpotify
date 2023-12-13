@@ -1,4 +1,4 @@
-package com.myapplication.ui
+package com.myapplication.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.myapplication.R
 import com.myapplication.ui.components.MusicalPicture
+import com.myapplication.ui.utils.MusicalIcons
 
 @Composable
 fun ReaderView(

@@ -14,6 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
+import com.myapplication.viewModels.LoginViewModel
+import com.myapplication.viewModels.PlaylistViewModel
 
 @Composable
 fun MusicalApp(
