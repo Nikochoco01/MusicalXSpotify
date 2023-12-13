@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -14,23 +15,31 @@ import androidx.navigation.compose.rememberNavController
 import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
-import com.myapplication.viewModels.LoginViewModel
+import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
+import com.myapplication.viewModels.UsersViewModel
 
 @Composable
 fun MusicalApp(
-    loginViewModel: LoginViewModel,
-    playlistViewModel: PlaylistViewModel
+    spotifyAPIViewModel: SpotifyAPIViewModel,
+    playlistViewModel: PlaylistViewModel,
+    usersViewModel: UsersViewModel
 ) {
+    var isConnected = false
     val navController = rememberNavController();
-    val token by loginViewModel.spotifyTokenLiveData.observeAsState()
-
-//    LaunchedEffect(Unit){
-//        loginViewModel.fetchSpotifyToken()
-//    }
+    val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
+    val userLogged by usersViewModel.musicalUsersLiveDataNotResponse.observeAsState(initial = null)
+    if(userLogged != null)
+        isConnected = true
+    LaunchedEffect(Unit){
+//        spotifyAPIViewModel.fetchSpotifyToken()
+        usersViewModel.FetchUserByCredential("" , "")
+    }
     MusicalAppContent(
         playlistViewModel = playlistViewModel,
-        navController = navController
+        usersViewModel = usersViewModel,
+        navController = navController,
+        isConnected = isConnected
     )
 }
 
@@ -39,14 +48,25 @@ fun MusicalApp(
 fun MusicalAppContent(
     modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
-    navController: NavHostController
+    usersViewModel: UsersViewModel,
+    navController: NavHostController,
+    isConnected: Boolean
 ) {
     Scaffold (
-        topBar = {NavTopBar(modifier, navController)},
+        topBar = {
+            if(isConnected)
+                NavTopBar(modifier, navController)
+        },
         content = {paddingValues ->
-            Box(modifier.fillMaxSize().padding(paddingValues) ){
-                NavigationGraph(modifier, navController, playlistViewModel)
+            Box(
+                modifier
+                    .fillMaxSize()
+                    .padding(paddingValues) ){
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel)
             } },
-        bottomBar = {NavBottomBar(modifier, navController)}
+        bottomBar = {
+            if(isConnected)
+                NavBottomBar(modifier, navController, 1)
+        }
     )
 }
