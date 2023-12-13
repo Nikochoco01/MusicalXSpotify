@@ -26,10 +26,12 @@ import androidx.navigation.NavController
 import com.myapplication.navigation.MusicalBarRoute
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
+import com.myapplication.viewModels.UsersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginView(
+    usersViewModel: UsersViewModel,
     modifier: Modifier,
     navController: NavController
 ){
@@ -69,8 +71,8 @@ fun LoginView(
                 Text(text = "Subscribe")
             }
             Button(onClick = {
-                val isAuthenticate = true
-                if(isAuthenticate){
+                val user = usersViewModel.musicalUsersLiveDataNotResponse.value
+                if(user != null){
                     navController.navigate(MusicalBarRoute.Reader.route)
                 }
             }, modifier.width(144.dp).height(48.dp)) {
