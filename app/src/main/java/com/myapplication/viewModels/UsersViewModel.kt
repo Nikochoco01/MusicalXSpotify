@@ -9,8 +9,10 @@ import com.myapplication.model.users.MusicalUsers
 import com.myapplication.model.users.SpotifyUsers
 import com.myapplication.repository.users.UsersMusicalRepository
 import com.myapplication.repository.users.UsersSpotifyRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class UsersViewModel : ViewModel() {
@@ -23,20 +25,28 @@ class UsersViewModel : ViewModel() {
     private var _musicalUsersLiveDataNotResponse : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
     val musicalUsersLiveDataNotResponse : LiveData<MusicalUsers?> = _musicalUsersLiveDataNotResponse
 
-    suspend fun FetchUserByCredential(email: String, password: String){
-        UsersMusicalRepository.getUsersByCredentials(email, password)
-            .catch {
-                Log.e("Fetch error" , it.toString())
-            }.collect{
-                _musicalUsersLiveDataNotResponse.postValue(it)
+    fun fetchUserByCredential(email: String, password: String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                UsersMusicalRepository.getUsersByCredentials(email, password)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }.collect{
+                        _musicalUsersLiveDataNotResponse.postValue(it)
+                    }
             }
+        }
     }
 
-    suspend fun CreateMusicalUser(pseudo: String, email: String, password: String){
-        UsersMusicalRepository.createMusicalUser(pseudo, email, password)
+    fun createMusicalUser(pseudo: String, email: String, password: String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                UsersMusicalRepository.createMusicalUser(pseudo, email, password)
+            }
+        }
     }
 
-    fun FetchSpotifyUser(id : String){
+    fun fetchSpotifyUser(id : String){
         viewModelScope.launch {
             UsersSpotifyRepository.getUsersDetails(id)
                 .catch {
@@ -47,7 +57,7 @@ class UsersViewModel : ViewModel() {
                 }
         }
     }
-    fun FetchMusicalUser(id: String){
+    fun fetchMusicalUser(id: String){
         viewModelScope.launch {
             UsersMusicalRepository.getUsersDetails(id)
                 .catch {
