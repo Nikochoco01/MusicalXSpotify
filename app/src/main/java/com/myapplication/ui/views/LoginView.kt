@@ -1,5 +1,6 @@
 package com.myapplication.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -31,12 +33,14 @@ import com.myapplication.viewModels.UsersViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginView(
-    usersViewModel: UsersViewModel,
     modifier: Modifier,
-    navController: NavController
+    usersViewModel: UsersViewModel,
+    onNavigateToSubscribe: () -> Unit,
+    onLoginSuccess: () -> Unit
 ){
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    val userLogged by usersViewModel.musicalUsersLiveDataNotResponse.observeAsState(initial = null)
 
     Column(
         modifier
@@ -66,15 +70,13 @@ fun LoginView(
         }
         Row (modifier.fillMaxWidth().height(48.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
-            OutlinedButton(onClick = { navController.navigate(MusicalInternalAppRoute.Subscribe.route) }, modifier.width(144.dp).height(48.dp)) {
+            OutlinedButton(onClick = { onNavigateToSubscribe.invoke() }, modifier.width(144.dp).height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconAdd, contentDescription = "Add icon")
                 Text(text = "Subscribe")
             }
             Button(onClick = {
-                val user = usersViewModel.musicalUsersLiveDataNotResponse.value
-                if(user != null){
-                    navController.navigate(MusicalBarRoute.Reader.route)
-                }
+                usersViewModel.fetchUserByCredential(email, password)
+                onLoginSuccess.invoke()
             }, modifier.width(144.dp).height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconLogin, contentDescription = "Login icon")
                 Text(text = "Login")

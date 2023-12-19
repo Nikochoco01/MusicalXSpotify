@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,22 +22,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
-import com.myapplication.navigation.MusicalBarRoute
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.UsersViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun  SubscribeView(
-    usersViewModel: UsersViewModel,
     modifier: Modifier,
-    navController: NavController
+    usersViewModel: UsersViewModel,
+    onNavigateToLogin: () -> Unit,
+    onRegistrationSuccess: () -> Unit
 ){
     var pseudo by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
@@ -85,25 +80,22 @@ fun  SubscribeView(
                 .fillMaxWidth()
                 .height(48.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
-            OutlinedButton(onClick = { navController.navigate(MusicalInternalAppRoute.Login.route) },
+            OutlinedButton(onClick = { onNavigateToLogin.invoke() },
                 modifier
                     .width(144.dp)
                     .height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconClose, contentDescription = "Cancel icon")
                 Text(text = "Cancel")
             }
-            Button(onClick = {
-                GlobalScope.launch {
-                    usersViewModel.CreateMusicalUser(pseudo, email, password)
-                }
-                val isSubscribe = true
-                if(isSubscribe){
-                    navController.navigate(MusicalBarRoute.Reader.route)
-                }
-            },
+            Button(
+                onClick = {
+                    usersViewModel.createMusicalUser(pseudo, email, password)
+                    onRegistrationSuccess.invoke()
+                },
                 modifier
                     .width(144.dp)
-                    .height(48.dp)) {
+                    .height(48.dp)
+            ) {
                 Icon(imageVector = MusicalIcons.iconAdd, contentDescription = "Subscribe icon")
                 Text(text = "Subscribe")
             }
