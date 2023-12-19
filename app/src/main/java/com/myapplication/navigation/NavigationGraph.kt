@@ -27,10 +27,14 @@ fun NavigationGraph(
         startDestination = MusicalInternalAppRoute.Login.route,
         modifier = modifier){
         composable(MusicalInternalAppRoute.Login.route){
-            LoginView(usersViewModel, modifier, navController)
+            LoginView(modifier, usersViewModel,
+                onNavigateToSubscribe = {navController.navigate(MusicalInternalAppRoute.Subscribe.route)},
+                onLoginSuccess = { navController.navigate(MusicalBarRoute.Reader.route) })
         }
         composable(MusicalInternalAppRoute.Subscribe.route){
-            SubscribeView(usersViewModel, modifier, navController)
+            SubscribeView(modifier, usersViewModel,
+                onNavigateToLogin = { navController.navigate(MusicalInternalAppRoute.Login.route)},
+                onRegistrationSuccess = { navController.navigate(MusicalInternalAppRoute.Login.route) })
         }
         composable(MusicalBarRoute.Reader.route){
             ReaderView(modifier)
