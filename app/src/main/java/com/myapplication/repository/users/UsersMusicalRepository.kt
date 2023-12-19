@@ -16,7 +16,7 @@ object UsersMusicalRepository {
         emit(MusicalDatabaseSource.getExitingUserByCredentials(email, password))
     }
 
-    suspend fun createMusicalUser(pseudo: String, email: String, password: String){
+    fun createMusicalUser(pseudo: String, email: String, password: String){
         val user = MusicalUsers(pseudo, email, password, null)
         MusicalDatabaseSource.insertNewUser(user)
     }
