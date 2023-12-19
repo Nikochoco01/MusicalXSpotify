@@ -38,7 +38,7 @@ fun MusicListItem(
         ),
         leadingContent = {
             MusicalPicture(modifier.size(56.dp).clip(RoundedCornerShape(24)),
-                drawableResource = R.drawable.picture_1_square, description = "music picture")
+                drawableResource = R.drawable.picture_1_square, description = "music picture") // stringResource(R.string.first)
         },
         headlineText = {
             Text(text = music.name,
