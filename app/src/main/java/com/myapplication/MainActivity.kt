@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private val spotifyAPIViewModel : SpotifyAPIViewModel by viewModels()
     private val playlistViewModel : PlaylistViewModel by viewModels()
     private val usersViewModel : UsersViewModel by viewModels()
+    private val userMusicalManager = UserMusicalManager.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -31,7 +33,8 @@ class MainActivity : ComponentActivity() {
                     MusicalApp(
                         spotifyAPIViewModel,
                         playlistViewModel,
-                        usersViewModel
+                        usersViewModel,
+                        userMusicalManager
                     )
                 }
             }
