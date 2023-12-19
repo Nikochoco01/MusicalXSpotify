@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
+import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -23,23 +24,26 @@ import com.myapplication.viewModels.UsersViewModel
 fun MusicalApp(
     spotifyAPIViewModel: SpotifyAPIViewModel,
     playlistViewModel: PlaylistViewModel,
-    usersViewModel: UsersViewModel
+    usersViewModel: UsersViewModel,
+    userMusicalManager: UserMusicalManager
 ) {
-    var isConnected = false
     val navController = rememberNavController();
     val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
     val userLogged by usersViewModel.musicalUsersLiveDataNotResponse.observeAsState(initial = null)
-    if(userLogged != null)
-        isConnected = true
+    if(userLogged != null){
+        userMusicalManager.isConnected = true
+        userMusicalManager.userID = userLogged!!.id!!
+    }
+
     LaunchedEffect(Unit){
 //        spotifyAPIViewModel.fetchSpotifyToken()
-        usersViewModel.FetchUserByCredential("" , "")
+        usersViewModel.fetchUserByCredential("" , "")
     }
     MusicalAppContent(
         playlistViewModel = playlistViewModel,
         usersViewModel = usersViewModel,
         navController = navController,
-        isConnected = isConnected
+        userMusicalManager = userMusicalManager
     )
 }
 
@@ -50,11 +54,11 @@ fun MusicalAppContent(
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
     navController: NavHostController,
-    isConnected: Boolean
+    userMusicalManager: UserMusicalManager
 ) {
     Scaffold (
         topBar = {
-            if(isConnected)
+            if(userMusicalManager.isConnected)
                 NavTopBar(modifier, navController)
         },
         content = {paddingValues ->
@@ -65,8 +69,8 @@ fun MusicalAppContent(
                 NavigationGraph(modifier, navController, playlistViewModel, usersViewModel)
             } },
         bottomBar = {
-            if(isConnected)
-                NavBottomBar(modifier, navController, 1)
+            if(userMusicalManager.isConnected)
+                NavBottomBar(modifier, navController, userMusicalManager.userID)
         }
     )
 }
