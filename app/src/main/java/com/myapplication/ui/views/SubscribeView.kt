@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.UsersViewModel
