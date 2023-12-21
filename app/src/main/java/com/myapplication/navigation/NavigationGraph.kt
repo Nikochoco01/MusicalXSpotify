@@ -29,12 +29,16 @@ fun NavigationGraph(
         composable(MusicalInternalAppRoute.Login.route){
             LoginView(modifier, usersViewModel,
                 onNavigateToSubscribe = {navController.navigate(MusicalInternalAppRoute.Subscribe.route)},
-                onLoginSuccess = { navController.navigate(MusicalBarRoute.Reader.route) })
+                onLoginSuccess = { navController.navigate(MusicalBarRoute.Reader.route){
+                    popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
+                } })
         }
         composable(MusicalInternalAppRoute.Subscribe.route){
             SubscribeView(modifier, usersViewModel,
                 onNavigateToLogin = { navController.navigate(MusicalInternalAppRoute.Login.route)},
-                onRegistrationSuccess = { navController.navigate(MusicalInternalAppRoute.Login.route) })
+                onRegistrationSuccess = { navController.navigate(MusicalInternalAppRoute.Login.route){
+                    popUpTo(MusicalInternalAppRoute.Subscribe.route) { inclusive = true }
+                } })
         }
         composable(MusicalBarRoute.Reader.route){
             ReaderView(modifier)
