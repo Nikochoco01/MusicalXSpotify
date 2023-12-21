@@ -22,8 +22,8 @@ class UsersViewModel : ViewModel() {
     private var _musicalUsersLiveData : MutableLiveData<Response<MusicalUsers>?> = MutableLiveData<Response<MusicalUsers>?>()
     val musicalUsersLiveData : LiveData<Response<MusicalUsers>?> = _musicalUsersLiveData
 
-    private var _musicalUsersLiveDataNotResponse : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
-    val musicalUsersLiveDataNotResponse : LiveData<MusicalUsers?> = _musicalUsersLiveDataNotResponse
+    private var _musicalUsersAuthentication : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
+    val musicalUsersAuthentication : LiveData<MusicalUsers?> = _musicalUsersAuthentication
 
     fun fetchUserByCredential(email: String, password: String){
         viewModelScope.launch {
@@ -32,7 +32,7 @@ class UsersViewModel : ViewModel() {
                     .catch {
                         Log.e("Fetch error" , it.toString())
                     }.collect{
-                        _musicalUsersLiveDataNotResponse.postValue(it)
+                        _musicalUsersAuthentication.postValue(it)
                     }
             }
         }
