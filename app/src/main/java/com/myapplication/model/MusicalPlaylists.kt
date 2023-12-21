@@ -4,10 +4,12 @@ data class MusicalPlaylists(
     val id: Int,
     val images: String,
     val name: String,
-    val tracks: List<Musics>)
+    val tracks: List<Musics>
+)
 
 data class SpotifyPlaylist(
     val id: Int,
     val images: String,
     val name: String,
-    val tracks: String)
+    val tracks: String
+)

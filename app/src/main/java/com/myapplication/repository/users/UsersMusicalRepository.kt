@@ -1,11 +1,22 @@
 package com.myapplication.repository.users
 
+import com.myapplication.dataSource.database.MusicalDatabaseSource
 import com.myapplication.model.users.MusicalUsers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 object UsersMusicalRepository {
+
+    suspend fun getUsersByCredentials(email: String , password : String) : Flow<MusicalUsers?> = flow {
+        emit(MusicalDatabaseSource.getExitingUserByCredentials(email, password))
+    }
+
+    fun createMusicalUser(pseudo: String, email: String, password: String){
+        val user = MusicalUsers(pseudo, email, password, null)
+        MusicalDatabaseSource.insertNewUser(user)
+    }
+
     suspend fun getUsersDetails(id: String) : Flow<Response<MusicalUsers>> = flow {
        // emit()
     }

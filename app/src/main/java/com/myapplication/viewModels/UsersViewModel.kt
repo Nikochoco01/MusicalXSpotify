@@ -9,8 +9,10 @@ import com.myapplication.model.users.MusicalUsers
 import com.myapplication.model.users.SpotifyUsers
 import com.myapplication.repository.users.UsersMusicalRepository
 import com.myapplication.repository.users.UsersSpotifyRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class UsersViewModel : ViewModel() {
@@ -20,7 +22,31 @@ class UsersViewModel : ViewModel() {
     private var _musicalUsersLiveData : MutableLiveData<Response<MusicalUsers>?> = MutableLiveData<Response<MusicalUsers>?>()
     val musicalUsersLiveData : LiveData<Response<MusicalUsers>?> = _musicalUsersLiveData
 
-    fun FetchSpotifyUser(id : String){
+    private var _musicalUsersAuthentication : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
+    val musicalUsersAuthentication : LiveData<MusicalUsers?> = _musicalUsersAuthentication
+
+    fun fetchUserByCredential(email: String, password: String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                UsersMusicalRepository.getUsersByCredentials(email, password)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }.collect{
+                        _musicalUsersAuthentication.postValue(it)
+                    }
+            }
+        }
+    }
+
+    fun createMusicalUser(pseudo: String, email: String, password: String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                UsersMusicalRepository.createMusicalUser(pseudo, email, password)
+            }
+        }
+    }
+
+    fun fetchSpotifyUser(id : String){
         viewModelScope.launch {
             UsersSpotifyRepository.getUsersDetails(id)
                 .catch {
@@ -31,7 +57,7 @@ class UsersViewModel : ViewModel() {
                 }
         }
     }
-    fun FetchMusicalUser(id: String){
+    fun fetchMusicalUser(id: String){
         viewModelScope.launch {
             UsersMusicalRepository.getUsersDetails(id)
                 .catch {

@@ -16,9 +16,9 @@ interface MusicalUsersDAO{
     @Delete
     fun deleteExistingUser(users: MusicalUsers)
     @Query("SELECT * FROM MusicalUsers WHERE mail == :email AND password == :password LIMIT 1")
-    fun getExitingUserByCredentials(email: String , password: String) : MusicalUsers
+    fun getExitingUserByCredentials(email: String , password: String) : MusicalUsers?
     @Query("SELECT * FROM MusicalUsers WHERE id == :userID LIMIT 1")
-    fun getExistingUserByMusicalUserID(userID: Int) : MusicalUsers
+    fun getExistingUserByMusicalUserID(userID: Int) : MusicalUsers?
     @Query("SELECT * FROM MusicalUsers WHERE spotifyUsersID == :spotifyID LIMIT 1")
-    fun getExistingUserBySpotifyUserID(spotifyID: Int) : MusicalUsers
+    fun getExistingUserBySpotifyUserID(spotifyID: Int) : MusicalUsers?
 }

@@ -6,31 +6,49 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.myapplication.navigation.MusicalBarRoute
+import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
-import com.myapplication.viewModels.LoginViewModel
+import com.myapplication.repository.users.UserMusicalManager
+import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
+import com.myapplication.viewModels.UsersViewModel
 
 @Composable
 fun MusicalApp(
-    loginViewModel: LoginViewModel,
-    playlistViewModel: PlaylistViewModel
+    spotifyAPIViewModel: SpotifyAPIViewModel,
+    playlistViewModel: PlaylistViewModel,
+    usersViewModel: UsersViewModel,
+    userMusicalManager: UserMusicalManager
 ) {
     val navController = rememberNavController();
-    val token by loginViewModel.spotifyTokenLiveData.observeAsState()
+    val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
+    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState(initial = null)
 
-//    LaunchedEffect(Unit){
-//        loginViewModel.fetchSpotifyToken()
-//    }
+    if(userLogged != null){
+        userMusicalManager.isConnected = true
+        userMusicalManager.userID = userLogged!!.id!!
+        navController.navigate(MusicalBarRoute.Reader.route){
+            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
+        }
+    }
+    LaunchedEffect(Unit){
+//        spotifyAPIViewModel.fetchSpotifyToken()
+        usersViewModel.fetchUserByCredential("" , "")
+    }
     MusicalAppContent(
         playlistViewModel = playlistViewModel,
-        navController = navController
+        usersViewModel = usersViewModel,
+        navController = navController,
+        userMusicalManager = userMusicalManager
     )
 }
 
@@ -39,14 +57,25 @@ fun MusicalApp(
 fun MusicalAppContent(
     modifier: Modifier = Modifier,
     playlistViewModel: PlaylistViewModel,
-    navController: NavHostController
+    usersViewModel: UsersViewModel,
+    navController: NavHostController,
+    userMusicalManager: UserMusicalManager
 ) {
     Scaffold (
-        topBar = {NavTopBar(modifier, navController)},
+        topBar = {
+            if(userMusicalManager.isConnected)
+                NavTopBar(modifier, navController)
+        },
         content = {paddingValues ->
-            Box(modifier.fillMaxSize().padding(paddingValues) ){
-                NavigationGraph(modifier, navController, playlistViewModel)
+            Box(
+                modifier
+                    .fillMaxSize()
+                    .padding(paddingValues) ){
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel)
             } },
-        bottomBar = {NavBottomBar(modifier, navController)}
+        bottomBar = {
+            if(userMusicalManager.isConnected)
+                NavBottomBar(modifier, navController, userMusicalManager.userID)
+        }
     )
 }
