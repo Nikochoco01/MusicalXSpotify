@@ -37,7 +37,7 @@ fun LoginView(
 ){
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    val userLogged by usersViewModel.musicalUsersLiveDataNotResponse.observeAsState(initial = null)
+    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState(initial = null)
 
     Column(
         modifier
@@ -47,7 +47,10 @@ fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 		Text(MusicalInternalAppRoute.Login.routeName)
-        Column (modifier.fillMaxWidth().height(160.dp),
+        Column (
+            modifier
+                .fillMaxWidth()
+                .height(160.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally){
             OutlinedTextField(
@@ -65,16 +68,29 @@ fun LoginView(
                 placeholder = { Text(text = "Enter your password") }
             )
         }
-        Row (modifier.fillMaxWidth().height(48.dp),
+        Row (
+            modifier
+                .fillMaxWidth()
+                .height(48.dp),
             horizontalArrangement = Arrangement.SpaceBetween){
-            OutlinedButton(onClick = { onNavigateToSubscribe.invoke() }, modifier.width(144.dp).height(48.dp)) {
+            OutlinedButton(onClick = { onNavigateToSubscribe.invoke() },
+                modifier
+                    .width(144.dp)
+                    .height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconAdd, contentDescription = "Add icon")
                 Text(text = "Subscribe")
             }
             Button(onClick = {
-                usersViewModel.fetchUserByCredential(email, password)
-                onLoginSuccess.invoke()
-            }, modifier.width(144.dp).height(48.dp)) {
+                if(email.isNotBlank() && email.isNotEmpty() && password.isNotBlank() && password.isNotEmpty()){
+                    usersViewModel.fetchUserByCredential(email, password)
+                }
+//                if(userLogged?.mail == email && userLogged?.password == password){
+//                    onLoginSuccess.invoke()
+//                }
+            },
+                modifier
+                    .width(144.dp)
+                    .height(48.dp)) {
                 Icon(imageVector = MusicalIcons.iconLogin, contentDescription = "Login icon")
                 Text(text = "Login")
             }
