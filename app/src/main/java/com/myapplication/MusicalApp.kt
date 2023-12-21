@@ -12,6 +12,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.myapplication.navigation.MusicalBarRoute
+import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
@@ -29,12 +31,15 @@ fun MusicalApp(
 ) {
     val navController = rememberNavController();
     val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
-    val userLogged by usersViewModel.musicalUsersLiveDataNotResponse.observeAsState(initial = null)
+    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState(initial = null)
+
     if(userLogged != null){
         userMusicalManager.isConnected = true
         userMusicalManager.userID = userLogged!!.id!!
+        navController.navigate(MusicalBarRoute.Reader.route){
+            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
+        }
     }
-
     LaunchedEffect(Unit){
 //        spotifyAPIViewModel.fetchSpotifyToken()
         usersViewModel.fetchUserByCredential("" , "")
