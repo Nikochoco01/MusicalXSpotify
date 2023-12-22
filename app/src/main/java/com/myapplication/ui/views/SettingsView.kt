@@ -15,7 +15,8 @@ import com.myapplication.ui.utils.MusicalIcons
 
 @Composable
 fun SettingsView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigate: () -> Unit
 ){
     Column (
         modifier.fillMaxSize().padding(16.dp),
@@ -26,21 +27,24 @@ fun SettingsView(
             textColor = MaterialTheme.colorScheme.onSurfaceVariant,
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             icon = MusicalIcons.iconArrowRight,
-            iconDescription = R.string.icon_arrow_right
+            iconDescription = R.string.icon_arrow_right,
+            onClickable = {}
         )
         MusicalSettingItem(modifier = modifier,
             textItem = R.string.setting_account_spotify,
             textColor = MaterialTheme.colorScheme.onSurfaceVariant,
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             icon = MusicalIcons.iconArrowRight,
-            iconDescription = R.string.icon_arrow_right
+            iconDescription = R.string.icon_arrow_right,
+            onClickable = {}
         )
         MusicalSettingItem(modifier = modifier,
             textItem = R.string.setting_bluetooth,
             textColor = MaterialTheme.colorScheme.onSurfaceVariant,
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             icon = MusicalIcons.iconArrowRight,
-            iconDescription = R.string.icon_arrow_right
+            iconDescription = R.string.icon_arrow_right,
+            onClickable = {}
         )
         if(isSystemInDarkTheme())
             MusicalSettingItem(modifier = modifier,
@@ -48,7 +52,8 @@ fun SettingsView(
                 textColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 icon = MusicalIcons.iconLightMode,
-                iconDescription = R.string.icon_light_mode
+                iconDescription = R.string.icon_light_mode,
+                onClickable = {}
             )
         else
             MusicalSettingItem(modifier = modifier,
@@ -56,14 +61,16 @@ fun SettingsView(
                 textColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 icon = MusicalIcons.iconDarkMode,
-                iconDescription = R.string.icon_dark_mode
+                iconDescription = R.string.icon_dark_mode,
+                onClickable = {}
             )
         MusicalSettingItem(modifier = modifier,
             textItem = R.string.setting_Logout,
             textColor = MaterialTheme.colorScheme.onErrorContainer,
             containerColor = MaterialTheme.colorScheme.errorContainer,
             icon = MusicalIcons.iconLogout,
-            iconDescription = R.string.icon_logout
+            iconDescription = R.string.icon_logout,
+            onClickable = {onNavigate.invoke()}
         )
     }
 }
