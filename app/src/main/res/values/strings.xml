@@ -11,4 +11,19 @@
     <string name="timer_reader">00:00:00</string>
     <string name="title_label">Music Title</string>
     <string name="artist_label">Music Artist</string>
+
+    <string name="setting_account">Account</string>
+    <string name="setting_account_spotify">Spotify Account</string>
+    <string name="setting_bluetooth">Bluetooth</string>
+    <string name="setting_Dark_mode">Dark mode</string>
+    <string name="setting_Light_mode">Light mode</string>
+    <string name="setting_Logout">Logout</string>
+
+    <string name="icon_dark_mode">icon dark mode</string>
+    <string name="icon_light_mode">icon light mode</string>
+    <string name="icon_spotify">icon spotify logo</string>
+    <string name="icon_bluetooth">icon bluetooth logo</string>
+    <string name="icon_logout">icon logout</string>
+    <string name="icon_login">icon login</string>
+    <string name="icon_arrow_right">Arrow Right</string>
 </resources>
