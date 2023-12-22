@@ -64,7 +64,12 @@ fun NavigationGraph(
             ?.let { idObtained -> MusicListView(playlistViewModel, navController, idObtained.toInt())}
         }
         composable(MusicalBarRoute.Settings.route){
-            SettingsView(modifier)
+            SettingsView(modifier,
+                onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
+                    popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
+                }
+            })
+            usersViewModel.fetchUserByCredential("", "")
         }
     }
 }
