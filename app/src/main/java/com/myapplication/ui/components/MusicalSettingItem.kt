@@ -24,12 +24,12 @@ fun MusicalSettingItem(
 	containerColor: Color,
 	icon: ImageVector,
 	iconDescription: Int,
-//	onClickable: () -> Unit
+	onClickable: () -> Unit
 ){
 	ListItem(
 		modifier = modifier
 			.clip(RoundedCornerShape(16.dp))
-			.clickable { }, //onClickable.invoke() }
+			.clickable { onClickable.invoke() },
 		headlineText = { Text(text = stringResource(textItem), color = textColor) },
 		colors = ListItemDefaults.colors(
 			containerColor = containerColor
