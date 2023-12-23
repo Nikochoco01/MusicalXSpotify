@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.myapplication.dataSource.bluetooth.MusicalBluetoothManager
 import com.myapplication.ui.views.LoginView
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.ui.views.MusicListView
@@ -20,6 +21,7 @@ import com.myapplication.viewModels.UsersViewModel
 fun NavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
+    musicalBluetoothManager: MusicalBluetoothManager,
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel
 ){
@@ -65,6 +67,7 @@ fun NavigationGraph(
         }
         composable(MusicalBarRoute.Settings.route){
             SettingsView(modifier,
+                musicalBluetoothManager,
                 onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
                 }
