@@ -30,10 +30,10 @@ object PhoneFilesDataSource {
         MusicalPlaylists(8, "", "Test playlist 8", musics),
         MusicalPlaylists(9, "", "Test playlist 9", musics)
     )
-    fun getPhonePlaylistByID(id: Int): MusicalPlaylists{
+    fun getPlaylistByID(id: Int): MusicalPlaylists{
        return playlists[id - 1]
     }
-    fun getAllPhonePlaylists(): List<MusicalPlaylists>{
+    fun getAllPlaylists(): List<MusicalPlaylists>{
         return playlists
     }
 }
