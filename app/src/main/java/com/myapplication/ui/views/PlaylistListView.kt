@@ -29,11 +29,11 @@ fun PlaylistListView(
     LaunchedEffect(Unit){
         playlistViewModel.fetchAllPlaylists(userId)
     }
-    val gotLiveData by playlistViewModel.playlistsLiveData.observeAsState(
+    val allPlaylists by playlistViewModel.allPlaylistsLiveData.observeAsState(
         initial = emptyList()
     )
 
-    if(gotLiveData == null){
+    if(allPlaylists == null){
         AlertDialog(
             title = { Text(text = "No playlist") },
             text = { Text(text = "You haven't any playlist") },
@@ -42,9 +42,9 @@ fun PlaylistListView(
     }
     else{
         if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.PLAYLIST_REMOVE)
-            PlaylistsListRemove(navController,gotLiveData)
+            PlaylistsListRemove(allPlaylists)
         else
-            PlaylistsList(navController, gotLiveData)
+            PlaylistsList(navController, allPlaylists)
     }
 }
 
@@ -71,7 +71,6 @@ fun PlaylistsList(
 
 @Composable
 fun PlaylistsListRemove(
-    navController: NavController,
     playlists : List<MusicalPlaylists>
 ){
     LazyVerticalGrid(
