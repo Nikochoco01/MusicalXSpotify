@@ -11,20 +11,20 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel : ViewModel(){
-    private var _phoneFileLiveData : MutableLiveData<MusicalPlaylists> = MutableLiveData<MusicalPlaylists>()
-    val phoneFileLiveData : LiveData<MusicalPlaylists> = _phoneFileLiveData
+    private var _playlistByIdLiveData : MutableLiveData<MusicalPlaylists> = MutableLiveData<MusicalPlaylists>()
+    val playlistByIdLiveData : LiveData<MusicalPlaylists> = _playlistByIdLiveData
 
-    private var _playlistsLiveData : MutableLiveData<List<MusicalPlaylists>> = MutableLiveData<List<MusicalPlaylists>>()
-    val playlistsLiveData : LiveData<List<MusicalPlaylists>> = _playlistsLiveData
+    private var _allPlaylistsLiveData : MutableLiveData<List<MusicalPlaylists>> = MutableLiveData<List<MusicalPlaylists>>()
+    val allPlaylistsLiveData : LiveData<List<MusicalPlaylists>> = _allPlaylistsLiveData
 
-    fun fetchPhoneFilePlaylist(id: Int){
+    fun fetchPlaylistByID(id: Int){
         viewModelScope.launch {
-            PlaylistRepository.getPlaylist(id)
+            PlaylistRepository.getPlaylistByID(id)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }
                 .collect{
-                    _phoneFileLiveData.postValue(it)
+                    _playlistByIdLiveData.postValue(it)
                     Log.e("Test Call" , "CALL Music");
                 }
         }
@@ -33,12 +33,12 @@ class PlaylistViewModel : ViewModel(){
     fun fetchAllPlaylists(userId: String){
         Log.e("Test Call" , "CALL Playlist");
         viewModelScope.launch {
-            PlaylistRepository.getPlaylists(userId)
+            PlaylistRepository.getAllPlaylists(userId)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }
                 .collect{
-                    _playlistsLiveData.postValue(it)
+                    _allPlaylistsLiveData.postValue(it)
                 }
         }
     }
