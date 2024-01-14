@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import com.myapplication.dataSource.bluetooth.MusicalBluetoothManager
 import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
+import com.myapplication.viewModels.BluetoothViewModel
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private val spotifyAPIViewModel : SpotifyAPIViewModel by viewModels()
     private val playlistViewModel : PlaylistViewModel by viewModels()
     private val usersViewModel : UsersViewModel by viewModels()
+    private val bluetoothViewModel : BluetoothViewModel by viewModels()
     private val userMusicalManager = UserMusicalManager.getInstance()
     private val musicalBluetoothManager = MusicalBluetoothManager.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +40,20 @@ class MainActivity : ComponentActivity() {
                         playlistViewModel,
                         usersViewModel,
                         userMusicalManager,
-                        musicalBluetoothManager
+                        bluetoothViewModel
                     )
                 }
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        var socket = bluetoothViewModel.bluetoothSocketLiveData.value
+        if(socket != null ){
+            bluetoothViewModel.isConnected(socket)
+            if(bluetoothViewModel.bluetoothSocketIsConnectedLiveData.value == true)
+                bluetoothViewModel.closeBluetoothSocket(socket)
         }
     }
 }
