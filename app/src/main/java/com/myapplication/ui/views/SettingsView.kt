@@ -17,11 +17,12 @@ import com.myapplication.dataSource.bluetooth.MusicalBluetoothManager
 import com.myapplication.ui.components.BluetoothDialog
 import com.myapplication.ui.components.MusicalSettingItem
 import com.myapplication.ui.utils.MusicalIcons
+import com.myapplication.viewModels.BluetoothViewModel
 
 @Composable
 fun SettingsView(
     modifier: Modifier = Modifier,
-    musicalBluetoothManager: MusicalBluetoothManager,
+    bluetoothViewModel : BluetoothViewModel,
     onNavigate: () -> Unit
 ){
     val showBluetoothDialog = remember {mutableStateOf(false)}
@@ -58,7 +59,7 @@ fun SettingsView(
         )
         if(showBluetoothDialog.value){
             BluetoothDialog (
-                musicalBluetoothManager,
+                bluetoothViewModel,
                 onDismissRequest = {showBluetoothDialog.value = false}
             )
         }
