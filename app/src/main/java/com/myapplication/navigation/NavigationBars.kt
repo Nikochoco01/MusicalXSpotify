@@ -22,7 +22,10 @@ import com.myapplication.ui.utils.MusicalIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavTopBar(modifier: Modifier, navController: NavHostController){
+fun NavTopBar(modifier: Modifier,
+              navController: NavHostController,
+              onPermission: () -> Unit,
+              onImport: () -> Unit){
     val menuIsExtended = remember { mutableStateOf(false) }
     val backStackEntry = navController.currentBackStackEntryAsState()
     CenterAlignedTopAppBar(modifier = modifier.background(MaterialTheme.colorScheme.surface),
@@ -110,13 +113,14 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
             if(menuIsExtended.value){
                 MusicalMenu(
                     expanded = menuIsExtended,
-                    onDismiss = { /*TODO*/ },
+                    onDismiss = { menuIsExtended.value = false },
                     removePlaylist = {
                         navController.navigate(MusicalInternalAppRoute.RemovePlaylist.route)
                         menuIsExtended.value = false
                     },
                     importPlaylist = {
-
+                        onPermission.invoke()
+                        onImport.invoke()
                         menuIsExtended.value = false
                     }
                 )
