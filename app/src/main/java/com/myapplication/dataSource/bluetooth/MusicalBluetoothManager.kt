@@ -22,10 +22,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.util.UUID
 
 class MusicalBluetoothManager {
-//	val uuid : UUID = UUID.fromString("4170ad80-2f8a-4019-a23a-506dfe1f4e2f")
-	var isActivated: Boolean = false
 	lateinit var bluetoothManager: BluetoothManager
 	lateinit var bluetoothAdapter: BluetoothAdapter
 	private lateinit var takePermission: ActivityResultLauncher<String>
@@ -40,14 +39,12 @@ class MusicalBluetoothManager {
 			handleActivityResult(result, activity)
 		}
 	}
-
 	/**
 	 * @param length is a Int value 0 for LENGTH_SHORT : 1 for LENGTH_LONG
 	 */
 	private fun getToast(context: Context, message: String, length: Int){
 		Toast.makeText(context, message, length).show()
 	}
-
 	private fun handlePermissionResult(isPermissionGranted: Boolean, context: Context){
 		if (isPermissionGranted) {
 			val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
@@ -56,7 +53,6 @@ class MusicalBluetoothManager {
 			getToast(context, "If you want to use a smart watch, enable Bluetooth in settings", 1)
 		}
 	}
-
 	private fun handleActivityResult(result: ActivityResult, context: Context) {
 		if (result.resultCode == Activity.RESULT_OK) {
 			getToast(context, "Your Bluetooth is already activated", 1)
@@ -64,20 +60,12 @@ class MusicalBluetoothManager {
 			getToast(context, "Your Bluetooth is not activated", 1)
 		}
 	}
-
-//	fun startBluetooth(){
-//		takePermission.launch(android.Manifest.permission.BLUETOOTH_CONNECT)
-//	}
-//
-//	fun stopBluetooth(context: Context){
-////		if (ActivityCompat.checkSelfPermission(context,
-////				Manifest.permission.BLUETOOTH_CONNECT
-////			) != PackageManager.PERMISSION_GRANTED
-////		) {
-////		}
-////		bluetoothAdapter.disable()
-//	}
-
+	fun startBluetooth(){
+		takePermission.launch(android.Manifest.permission.BLUETOOTH_CONNECT)
+	}
+	fun checkBluetoothStatus() : Boolean{
+		return bluetoothAdapter.isEnabled
+	}
 	fun getPairedDevices(context: Context): MutableSet<BluetoothDevice>? {
 		if (ActivityCompat.checkSelfPermission(
 				context,
@@ -87,36 +75,64 @@ class MusicalBluetoothManager {
 		}
 		return bluetoothAdapter.bondedDevices
 	}
-
-	fun connectToDevice(context: Context, device: BluetoothDevice, uuid: ParcelUuid){
+	fun createBluetoothSocket(context: Context, device: BluetoothDevice): BluetoothSocket? {
+		val uuid = UUID.randomUUID()
 		val socket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
 			if (ActivityCompat.checkSelfPermission(
 					context,
 					Manifest.permission.BLUETOOTH_CONNECT
 				) != PackageManager.PERMISSION_GRANTED
 			) {
+				getToast(context, "Please authorize the application to use your bluetooth ", 1)
 			}
-			device.createRfcommSocketToServiceRecord(uuid.uuid)
+			device.createRfcommSocketToServiceRecord(uuid)
 		}
-
-//		bluetoothAdapter?.cancelDiscovery()
-
-		GlobalScope.launch (Dispatchers.IO){
-			try {
-				socket?.connect()
-			}
-			catch (e:IOException){
-				Log.e("Bluetooth_connection", e.toString())
-			}
+		return socket
+	}
+	fun closeBluetoothSocket(socket: BluetoothSocket): Boolean {
+		try {
+			socket?.close()
+			return true
+		} catch (e: IOException) {
+			Log.e("Bluetooth error", "Error closing socket", e)
+			return false
 		}
 	}
-
+	fun connectToDevice(context: Context, socket: BluetoothSocket): Boolean{
+		try {
+			if (ActivityCompat.checkSelfPermission(
+					context,
+					Manifest.permission.BLUETOOTH_CONNECT
+				) != PackageManager.PERMISSION_GRANTED
+			) {
+				// TODO: Consider calling
+				//    ActivityCompat#requestPermissions
+				// here to request the missing permissions, and then overriding
+				//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+				//                                          int[] grantResults)
+				// to handle the case where the user grants the permission. See the documentation
+				// for ActivityCompat#requestPermissions for more details.
+			}
+			socket.connect()
+			return isConnected(socket)
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", e.toString())
+			return false
+		}
+		finally {
+			closeBluetoothSocket(socket)
+			return false
+		}
+	}
+	fun isConnected(socket: BluetoothSocket): Boolean{
+		return socket.isConnected
+	}
 	companion object {
 		private lateinit var instance: MusicalBluetoothManager
 
 		fun initBluetoothManager(context: Context){
 			instance = MusicalBluetoothManager()
-			instance.isActivated = false
 			instance.bluetoothManager = getSystemService(context , BluetoothManager::class.java)!!
 			instance.bluetoothAdapter = instance.bluetoothManager.adapter
 		}
