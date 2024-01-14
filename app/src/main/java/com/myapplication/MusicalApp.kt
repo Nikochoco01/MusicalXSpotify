@@ -24,6 +24,7 @@ import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
 import com.myapplication.repository.users.UserMusicalManager
+import com.myapplication.viewModels.BluetoothViewModel
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -34,7 +35,7 @@ fun MusicalApp(
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
     userMusicalManager: UserMusicalManager,
-    musicalBluetoothManager: MusicalBluetoothManager
+    bluetoothViewModel: BluetoothViewModel
 ) {
     val navController = rememberNavController();
     val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
@@ -48,9 +49,6 @@ fun MusicalApp(
         }
     }
 
-    if(musicalBluetoothManager.bluetoothAdapter == null)
-        Toast.makeText(LocalContext.current, "Your device don't support bluetooth", Toast.LENGTH_LONG).show()
-
     LaunchedEffect(Unit){
 //        spotifyAPIViewModel.fetchSpotifyToken()
         usersViewModel.fetchUserByCredential("" , "")
@@ -60,7 +58,7 @@ fun MusicalApp(
         usersViewModel = usersViewModel,
         navController = navController,
         userMusicalManager = userMusicalManager,
-        musicalBluetoothManager = musicalBluetoothManager
+        bluetoothViewModel = bluetoothViewModel
     )
 }
 
@@ -72,7 +70,7 @@ fun MusicalAppContent(
     usersViewModel: UsersViewModel,
     navController: NavHostController,
     userMusicalManager: UserMusicalManager,
-    musicalBluetoothManager: MusicalBluetoothManager
+    bluetoothViewModel : BluetoothViewModel
 ) {
     Scaffold (
         topBar = {
@@ -84,7 +82,7 @@ fun MusicalAppContent(
                 modifier
                     .fillMaxSize()
                     .padding(paddingValues) ){
-                NavigationGraph(modifier, navController, musicalBluetoothManager, playlistViewModel, usersViewModel)
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, bluetoothViewModel)
             } },
         bottomBar = {
             if(userMusicalManager.isConnected)
