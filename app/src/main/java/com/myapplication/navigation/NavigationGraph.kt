@@ -14,6 +14,7 @@ import com.myapplication.ui.views.PlaylistListView
 import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
 import com.myapplication.ui.views.SubscribeView
+import com.myapplication.viewModels.PhoneManagerViewModel
 import com.myapplication.viewModels.UsersViewModel
 
 @Composable
@@ -21,7 +22,8 @@ fun NavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
     playlistViewModel: PlaylistViewModel,
-    usersViewModel: UsersViewModel
+    usersViewModel: UsersViewModel,
+    phoneManagerViewModel: PhoneManagerViewModel
 ){
     NavHost(navController = navController,
         startDestination = MusicalInternalAppRoute.Login.route,
@@ -46,12 +48,12 @@ fun NavigationGraph(
         composable(MusicalBarRoute.Playlist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-                    ?.let { PlaylistListView(playlistViewModel, navController, it) }
+                    ?.let { PlaylistListView(phoneManagerViewModel, playlistViewModel, navController, it) }
         }
         composable(MusicalInternalAppRoute.RemovePlaylist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-                    ?.let { PlaylistListView(playlistViewModel, navController, it) }
+                    ?.let { PlaylistListView(phoneManagerViewModel, playlistViewModel, navController, it) }
         }
         composable(MusicalInternalAppRoute.LoadPlaylist.route,
             arguments = listOf(navArgument("playlistID"){type = NavType.StringType})){
