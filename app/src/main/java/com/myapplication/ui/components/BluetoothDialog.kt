@@ -104,8 +104,8 @@ fun BluetoothDialog(
 							deviceName = device.name,
 							onClickable = {
 								bluetoothViewModel.createBluetoothSocket(context, device)
-								if(bluetoothSocketLiveData !== null)
-									bluetoothViewModel.connectToDevice(context, bluetoothSocketLiveData!!)
+//								if(bluetoothSocketLiveData !== null)
+//									bluetoothViewModel.connectToDevice(context, bluetoothSocketLiveData!!)
 							}
 						)
 					}
