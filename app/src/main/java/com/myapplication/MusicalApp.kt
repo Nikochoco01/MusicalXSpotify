@@ -1,8 +1,5 @@
 package com.myapplication
 
-import android.bluetooth.BluetoothAdapter
-import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,11 +10,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.myapplication.dataSource.bluetooth.MusicalBluetoothManager
 import com.myapplication.navigation.MusicalBarRoute
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.navigation.NavBottomBar
