@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.myapplication.dataSource.bluetooth.MusicalBluetoothManager
+import com.myapplication.dataSource.bluetooth.MusicalBluetoothService
 import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
 import com.myapplication.viewModels.BluetoothViewModel
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     private val usersViewModel : UsersViewModel by viewModels()
     private val bluetoothViewModel : BluetoothViewModel by viewModels()
     private val userMusicalManager = UserMusicalManager.getInstance()
-    private val musicalBluetoothManager = MusicalBluetoothManager.getInstance()
+    private val musicalBluetoothManager = MusicalBluetoothService.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

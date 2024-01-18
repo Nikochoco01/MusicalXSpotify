@@ -7,7 +7,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.myapplication.dataSource.bluetooth.MusicalBluetoothManager
 import com.myapplication.ui.views.LoginView
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.ui.views.MusicListView

@@ -5,11 +5,11 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.ParcelUuid
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -18,13 +18,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.UUID
 
-class MusicalBluetoothManager {
+class MusicalBluetoothService {
 	lateinit var bluetoothManager: BluetoothManager
 	lateinit var bluetoothAdapter: BluetoothAdapter
 	private lateinit var takePermission: ActivityResultLauncher<String>
@@ -76,18 +73,38 @@ class MusicalBluetoothManager {
 		return bluetoothAdapter.bondedDevices
 	}
 	fun createBluetoothSocket(context: Context, device: BluetoothDevice): BluetoothSocket? {
-		val uuid = UUID.randomUUID()
-		val socket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
-			if (ActivityCompat.checkSelfPermission(
-					context,
-					Manifest.permission.BLUETOOTH_CONNECT
-				) != PackageManager.PERMISSION_GRANTED
-			) {
-				getToast(context, "Please authorize the application to use your bluetooth ", 1)
-			}
-			device.createRfcommSocketToServiceRecord(uuid)
+//		val uuid = UUID.randomUUID()
+		val serverUUID = UUID.randomUUID()
+		var serverSocket: BluetoothServerSocket? = null
+		var socket: BluetoothSocket? = null
+		if (ActivityCompat.checkSelfPermission(
+				context,
+				Manifest.permission.BLUETOOTH_CONNECT
+			) != PackageManager.PERMISSION_GRANTED
+		) {
 		}
-		return socket
+
+		try {
+			serverSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("MusicalXSpotify", serverUUID)!!
+			if(serverSocket != null)
+				socket = serverSocket.accept()
+			return socket
+		}
+		catch (e:IOException){
+			Log.e("Bluetooth error", e.toString())
+			serverSocket?.close()
+			return null
+		}
+//		val socket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+//			if (ActivityCompat.checkSelfPermission(
+//					context,
+//					Manifest.permission.BLUETOOTH_CONNECT
+//				) != PackageManager.PERMISSION_GRANTED
+//			) {
+//				getToast(context, "Please authorize the application to use your bluetooth ", 1)
+//			}
+//			device.createRfcommSocketToServiceRecord(uuid)
+//		}
 	}
 	fun closeBluetoothSocket(socket: BluetoothSocket): Boolean {
 		try {
@@ -129,14 +146,14 @@ class MusicalBluetoothManager {
 		return socket.isConnected
 	}
 	companion object {
-		private lateinit var instance: MusicalBluetoothManager
+		private lateinit var instance: MusicalBluetoothService
 
 		fun initBluetoothManager(context: Context){
-			instance = MusicalBluetoothManager()
+			instance = MusicalBluetoothService()
 			instance.bluetoothManager = getSystemService(context , BluetoothManager::class.java)!!
 			instance.bluetoothAdapter = instance.bluetoothManager.adapter
 		}
-		fun getInstance(): MusicalBluetoothManager{
+		fun getInstance(): MusicalBluetoothService{
 			return instance
 		}
 
