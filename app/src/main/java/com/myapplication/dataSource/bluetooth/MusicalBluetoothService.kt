@@ -47,14 +47,14 @@ class MusicalBluetoothService {
 			val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
 			takeResultLauncher.launch(intent)
 		} else {
-			getToast(context, "If you want to use a smart watch, enable Bluetooth in settings", 1)
+//			getToast(context, "If you want to use a smart watch, enable Bluetooth in settings", 1)
 		}
 	}
 	private fun handleActivityResult(result: ActivityResult, context: Context) {
 		if (result.resultCode == Activity.RESULT_OK) {
-			getToast(context, "Your Bluetooth is already activated", 1)
+//			getToast(context, "Your Bluetooth is already activated", 1)
 		} else {
-			getToast(context, "Your Bluetooth is not activated", 1)
+//			getToast(context, "Your Bluetooth is not activated", 1)
 		}
 	}
 	fun startBluetooth(){
