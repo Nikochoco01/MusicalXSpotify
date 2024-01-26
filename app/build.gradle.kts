@@ -43,12 +43,17 @@ android {
             dimension = "environment"
 //            applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            buildConfigField("String", "musicalXSpotify", "\"API-keyvalue\"")
+            buildConfigField("String", "GRANT_TYPE", "\"client_credentials\"")
+            buildConfigField("String", "CLIENT_ID", "\"97e4ffd132de48b994e860461e571c6a\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"633a5550b7374b63939eeef8dbc0a091\"")
         }
         create("production"){
             dimension = "environment"
             applicationIdSuffix = ".prod"
             versionNameSuffix = "-prod"
+            buildConfigField("String", "GRANT_TYPE", "\"client_credentials\"")
+            buildConfigField("String", "CLIENT_ID", "\"97e4ffd132de48b994e860461e571c6a\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"633a5550b7374b63939eeef8dbc0a091\"")
         }
     }
 
