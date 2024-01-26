@@ -21,6 +21,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildFeatures {
+            buildConfig = true
+        }
     }
 
     buildTypes {
@@ -32,6 +36,22 @@ android {
             )
         }
     }
+
+    flavorDimensions += "environment"
+    productFlavors{
+        create("develop"){
+            dimension = "environment"
+//            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "musicalXSpotify", "\"API-keyvalue\"")
+        }
+        create("production"){
+            dimension = "environment"
+            applicationIdSuffix = ".prod"
+            versionNameSuffix = "-prod"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
