@@ -31,7 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.myapplication.R
@@ -62,7 +62,7 @@ fun ReaderView(
                     .height(328.dp)
                     .padding(16.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                drawableResource = R.drawable.picture_1_square , description = "Music picture")
+                drawableResource = R.drawable.picture_1_square , description = stringResource(id = R.string.picture_description))
             Spacer(modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
@@ -77,8 +77,8 @@ fun ReaderView(
                     .fillMaxHeight()
                     .padding(16.dp),
                     verticalArrangement = Arrangement.SpaceAround) {
-                Text(text = "Title" , fontSize = 32.sp)
-                Text(text = "Artist", fontSize = 16.sp)
+                Text(text = stringResource(id = R.string.title_label) , fontSize = 32.sp)
+                Text(text = stringResource(id = R.string.artist_label), fontSize = 16.sp)
             }
         }
         Spacer(modifier = modifier.height(8.dp))
@@ -97,8 +97,8 @@ fun ReaderView(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "00:00:00")
-                    Text(text = "00:00:00")
+                    Text(text = stringResource(id = R.string.timer_reader))
+                    Text(text = stringResource(id = R.string.timer_reader))
                 }
                 Slider(
                     value = sliderPosition,
@@ -113,8 +113,10 @@ fun ReaderView(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                IconButton(onClick = { /*TODO*/ }, modifier.size(56.dp), colors = IconButtonDefaults.outlinedIconButtonColors(contentColor = MaterialTheme.colorScheme.secondary)) {
-                    Icon(MusicalIcons.iconPrevious, "previous button", modifier.size(56.dp))
+                IconButton(onClick = { /*TODO*/ },
+                    modifier = modifier.size(56.dp),
+                    colors = IconButtonDefaults.outlinedIconButtonColors(contentColor = MaterialTheme.colorScheme.secondary)) {
+                    Icon(MusicalIcons.iconPrevious, stringResource(id = R.string.previous_button), modifier.size(56.dp))
                 }
                 IconToggleButton(
                     checked = inRead,
@@ -124,22 +126,18 @@ fun ReaderView(
                     modifier
                         .size(64.dp)
                         .clip(RoundedCornerShape(56.dp)),
-                    colors = IconButtonDefaults.filledIconToggleButtonColors(
-                                                    checkedContainerColor = MaterialTheme.colorScheme.primary)
+                    colors = IconButtonDefaults.filledIconToggleButtonColors(checkedContainerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     var icon = if (inRead) MusicalIcons.iconPause else MusicalIcons.iconPlay
-                    Icon(icon, "play/pause button", modifier.size(64.dp))
+                    Icon(icon, stringResource(id = R.string.play_pause_button), modifier.size(64.dp))
                 }
-                IconButton(onClick = { /*TODO*/ }, modifier.size(56.dp), colors = IconButtonDefaults.outlinedIconButtonColors(contentColor = MaterialTheme.colorScheme.secondary)) {
-                    Icon(MusicalIcons.iconNext, "next button", modifier.size(56.dp))
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    modifier = modifier.size(56.dp),
+                    colors = IconButtonDefaults.outlinedIconButtonColors(contentColor = MaterialTheme.colorScheme.secondary)) {
+                    Icon(MusicalIcons.iconNext, stringResource(id = R.string.next_button), modifier.size(56.dp))
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ReaderPreview(){
-    ReaderView()
 }
