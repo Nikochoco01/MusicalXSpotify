@@ -26,4 +26,8 @@
     <string name="icon_logout">icon logout</string>
     <string name="icon_login">icon login</string>
     <string name="icon_arrow_right">Arrow Right</string>
+
+
+    <string name="dialog_connecting">connection is in process</string>
+    <string name="dialog_connecting_watch">please select your phone form watch</string>
 </resources>
