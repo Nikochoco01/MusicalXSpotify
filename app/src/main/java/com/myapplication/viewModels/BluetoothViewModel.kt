@@ -14,21 +14,23 @@ import com.myapplication.repository.bluetooth.BluetoothRepository
 import kotlinx.coroutines.flow.catch
 
 class BluetoothViewModel: ViewModel(){
-
-	private var _bluetoothSocketLiveData : MutableLiveData<BluetoothSocket?> = MutableLiveData<BluetoothSocket?>()
-	val bluetoothSocketLiveData : LiveData<BluetoothSocket?> = _bluetoothSocketLiveData
+	private var _bluetoothDevicesLiveData : MutableLiveData<Set<BluetoothDevice>?> = MutableLiveData<Set<BluetoothDevice>?>()
+	val listDiscoveredBluetoothDevices : LiveData<Set<BluetoothDevice>?> = _bluetoothDevicesLiveData
 
 	private var _bluetoothSocketIsCloseLiveData : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-	val bluetoothSocketIsCloseLiveData : LiveData<Boolean> = _bluetoothSocketIsCloseLiveData
+	val bluetoothSocketIsClose : LiveData<Boolean> = _bluetoothSocketIsCloseLiveData
 
 	private var _bluetoothSocketIsConnectedLiveData : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-	val bluetoothSocketIsConnectedLiveData : LiveData<Boolean> = _bluetoothSocketIsConnectedLiveData
+	val bluetoothSocketIsConnected : LiveData<Boolean> = _bluetoothSocketIsConnectedLiveData
 
 	private var _bluetoothStatusLiveData : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-	val bluetoothStatusLiveData : LiveData<Boolean> = _bluetoothStatusLiveData
+	val bluetoothIsActivated : LiveData<Boolean> = _bluetoothStatusLiveData
 
-	private var _bluetoothDevicesLiveData : MutableLiveData<MutableSet<BluetoothDevice>?> = MutableLiveData<MutableSet<BluetoothDevice>?>()
-	val bluetoothDevicesLiveData : LiveData<MutableSet<BluetoothDevice>?> = _bluetoothDevicesLiveData
+	private var _bluetoothSocketLiveData : MutableLiveData<BluetoothSocket?> = MutableLiveData<BluetoothSocket?>()
+	val bluetoothSocket : LiveData<BluetoothSocket?> = _bluetoothSocketLiveData
+
+
+
 	fun checkBluetoothStatus() {
 		viewModelScope.launch(Dispatchers.IO) {
 			BluetoothRepository.checkBluetoothStatus()
