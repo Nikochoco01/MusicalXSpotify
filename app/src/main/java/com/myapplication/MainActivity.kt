@@ -49,10 +49,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        var socket = bluetoothViewModel.bluetoothSocketLiveData.value
+        var socket = bluetoothViewModel.bluetoothSocket.value
         if(socket != null ){
             bluetoothViewModel.isConnected(socket)
-            if(bluetoothViewModel.bluetoothSocketIsConnectedLiveData.value == true)
+            if(bluetoothViewModel.bluetoothSocketIsConnected.value == true)
                 bluetoothViewModel.closeBluetoothSocket(socket)
         }
     }
