@@ -44,14 +44,15 @@ fun BluetoothDialog(
 	}
 
 	var context = LocalContext.current
-	val bluetoothSocketLiveData by bluetoothViewModel.bluetoothSocketLiveData.observeAsState()
-	val bluetoothSocketIsCloseLiveData by bluetoothViewModel.bluetoothSocketIsCloseLiveData.observeAsState()
-	val bluetoothSocketIsConnectedLiveData by bluetoothViewModel.bluetoothSocketIsConnectedLiveData.observeAsState()
-	val bluetoothStatusLiveData by bluetoothViewModel.bluetoothStatusLiveData.observeAsState(initial = false)
-	val bluetoothDevicesLiveData by bluetoothViewModel.bluetoothDevicesLiveData.observeAsState()
 
-	var bluetoothStatusRemember = remember { mutableStateOf(bluetoothStatusLiveData) }
+	val bluetoothDevices by bluetoothViewModel.listDiscoveredBluetoothDevices.observeAsState()
+	val bluetoothSocketIsClose by bluetoothViewModel.bluetoothSocketIsClose.observeAsState(initial = false)
+//	val bluetoothSocketIsConnected by bluetoothViewModel.bluetoothSocketIsConnected.observeAsState(initial = false)
+	val bluetoothIsActivated by bluetoothViewModel.bluetoothIsActivated.observeAsState(initial = false)
+	val bluetoothSocket by bluetoothViewModel.bluetoothSocket.observeAsState()
 
+	var bluetoothStatusRemember = remember { mutableStateOf(bluetoothIsActivated) }
+	var showConnectionDialog = remember { mutableStateOf(false) }
 	Dialog(
 		onDismissRequest = { onDismissRequest() }
 	){
@@ -90,7 +91,7 @@ fun BluetoothDialog(
 					.padding(16.dp),
 				verticalArrangement = Arrangement.spacedBy(16.dp)
 			){
-				bluetoothDevicesLiveData?.forEach {
+				bluetoothDevices?.forEach {
 					device ->
 					item { 
 						if (ActivityCompat.checkSelfPermission(
@@ -99,13 +100,11 @@ fun BluetoothDialog(
 							) != PackageManager.PERMISSION_GRANTED
 						) {
 						}
-						Log.e("UUID", "device name: ${device.name} uuid: ${device.uuids.get(0)}")
 						BluetoothItem(modifier = modifier,
 							deviceName = device.name,
 							onClickable = {
 								bluetoothViewModel.createBluetoothSocket(context, device)
-//								if(bluetoothSocketLiveData !== null)
-//									bluetoothViewModel.connectToDevice(context, bluetoothSocketLiveData!!)
+								showConnectionDialog.value = true
 							}
 						)
 					}
@@ -115,20 +114,30 @@ fun BluetoothDialog(
 				else
 					bluetoothViewModel.getPairedDevices(context)
 
-				if(bluetoothSocketIsConnectedLiveData == true)
+				if(bluetoothSocket?.isConnected == true){
 					Toast.makeText(context, "Connection is established", Toast.LENGTH_LONG).show()
+					showConnectionDialog.value = false
+				}
 				else
 					Toast.makeText(context, "Connection is not established", Toast.LENGTH_LONG).show()
 
-				if(bluetoothSocketIsCloseLiveData == true)
-					Toast.makeText(context, "Connection is close", Toast.LENGTH_LONG).show()
-				else
-					Toast.makeText(context, "Connection is not close", Toast.LENGTH_LONG).show()
+//				if(bluetoothSocketIsConnectedLiveData == true)
+//					Toast.makeText(context, "Connection is established", Toast.LENGTH_LONG).show()
+//				else
+//					Toast.makeText(context, "Connection is not established", Toast.LENGTH_LONG).show()
 
-				if(bluetoothStatusLiveData)
-					Toast.makeText(context, "Bluetooth is enable", Toast.LENGTH_LONG).show()
-				else
+				if(bluetoothSocketIsClose)
+					Toast.makeText(context, "Connection is close", Toast.LENGTH_LONG).show()
+
+				if(!bluetoothIsActivated)
 					Toast.makeText(context, "Connection is disable", Toast.LENGTH_LONG).show()
+			}
+			if (showConnectionDialog.value){
+				MusicalProgress(
+					modifier = modifier,
+					circleColor = MaterialTheme.colorScheme.primary,
+					onDismiss = { }
+				)
 			}
 		}
 	}
