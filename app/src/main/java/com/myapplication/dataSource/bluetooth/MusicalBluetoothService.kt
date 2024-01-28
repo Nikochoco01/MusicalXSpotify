@@ -73,8 +73,7 @@ class MusicalBluetoothService {
 		return bluetoothAdapter.bondedDevices
 	}
 	fun createBluetoothSocket(context: Context, device: BluetoothDevice): BluetoothSocket? {
-//		val uuid = UUID.randomUUID()
-		val serverUUID = UUID.randomUUID()
+		val serverUUID = UUID.fromString("5238c3c0-ddf6-4a48-bab7-7ec1f037b0a2")
 		var serverSocket: BluetoothServerSocket? = null
 		var socket: BluetoothSocket? = null
 		if (ActivityCompat.checkSelfPermission(
@@ -91,20 +90,10 @@ class MusicalBluetoothService {
 			return socket
 		}
 		catch (e:IOException){
-			Log.e("Bluetooth error", e.toString())
+			Log.e("Bluetooth error", "Create server socket error: $e")
 			serverSocket?.close()
 			return null
 		}
-//		val socket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
-//			if (ActivityCompat.checkSelfPermission(
-//					context,
-//					Manifest.permission.BLUETOOTH_CONNECT
-//				) != PackageManager.PERMISSION_GRANTED
-//			) {
-//				getToast(context, "Please authorize the application to use your bluetooth ", 1)
-//			}
-//			device.createRfcommSocketToServiceRecord(uuid)
-//		}
 	}
 	fun closeBluetoothSocket(socket: BluetoothSocket): Boolean {
 		try {
@@ -134,7 +123,7 @@ class MusicalBluetoothService {
 			return isConnected(socket)
 		}
 		catch (e: IOException){
-			Log.e("Bluetooth error", e.toString())
+			Log.e("Bluetooth error", "Connect to device error: $e")
 			return false
 		}
 		finally {
