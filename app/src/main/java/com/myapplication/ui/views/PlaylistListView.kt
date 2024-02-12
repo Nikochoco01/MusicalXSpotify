@@ -1,6 +1,7 @@
 package com.myapplication.ui.views
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,23 +18,44 @@ import androidx.navigation.NavController
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.navigation.MusicalRoute
+import com.myapplication.repository.bluetooth.BluetoothCodeTransmissions
 import com.myapplication.ui.components.PlaylistListItem
 import com.myapplication.ui.components.PlaylistListItemSelected
+import com.myapplication.viewModels.MusicalControlViewModel
 
 @Composable
 fun PlaylistListView(
     playlistViewModel: PlaylistViewModel,
+    musicalControlViewModel: MusicalControlViewModel,
     navController: NavController,
-    userId: String
+    userId: String,
+    sendAllPlaylist: (List<MusicalPlaylists>) -> Unit,
+    sendPlaylistById: (MusicalPlaylists) -> Unit
 ){
     LaunchedEffect(Unit){
         playlistViewModel.fetchAllPlaylists(userId)
     }
-    val gotLiveData by playlistViewModel.playlistsLiveData.observeAsState(
+    val orderFromWatch by musicalControlViewModel.orderFromWatch.observeAsState()
+    val playlistPhone by playlistViewModel.playlistsLiveData.observeAsState(
         initial = emptyList()
     )
 
-    if(gotLiveData == null){
+    if(orderFromWatch == BluetoothCodeTransmissions.GET_ALL_PLAYLIST){
+        Log.e("error", "Order From watch $orderFromWatch")
+        if(!playlistPhone.isNullOrEmpty())
+            sendAllPlaylist.invoke(playlistPhone)
+        else
+            sendAllPlaylist.invoke(emptyList())
+    }
+
+//    if(orderFromWatch == BluetoothCodeTransmissions.GET_PLAYLIST_BY_ID){
+//        if(!gotLiveData.isNullOrEmpty())
+//            sendPlaylistById.invoke(gotLiveData.)
+//        else
+//            sendAllPlaylist.invoke(emptyList())
+//    }
+
+    if(playlistPhone == null){
         AlertDialog(
             title = { Text(text = "No playlist") },
             text = { Text(text = "You haven't any playlist") },
@@ -42,9 +64,9 @@ fun PlaylistListView(
     }
     else{
         if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.PLAYLIST_REMOVE)
-            PlaylistsListRemove(navController,gotLiveData)
+            PlaylistsListRemove(navController,playlistPhone)
         else
-            PlaylistsList(navController, gotLiveData)
+            PlaylistsList(navController, playlistPhone)
     }
 }
 
