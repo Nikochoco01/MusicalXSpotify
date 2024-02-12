@@ -15,6 +15,7 @@ import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
 import com.myapplication.ui.views.SubscribeView
 import com.myapplication.viewModels.BluetoothViewModel
+import com.myapplication.viewModels.MusicalControlViewModel
 import com.myapplication.viewModels.UsersViewModel
 
 @Composable
@@ -23,7 +24,8 @@ fun NavigationGraph(
     navController: NavHostController,
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
-    bluetoothViewModel: BluetoothViewModel
+    bluetoothViewModel: BluetoothViewModel,
+    musicalControlViewModel: MusicalControlViewModel
 ){
     NavHost(navController = navController,
         startDestination = MusicalInternalAppRoute.Login.route,
@@ -43,31 +45,57 @@ fun NavigationGraph(
                 } })
         }
         composable(MusicalBarRoute.Reader.route){
-            ReaderView(modifier)
+            ReaderView(modifier = modifier)
         }
         composable(MusicalBarRoute.Playlist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-                    ?.let { PlaylistListView(playlistViewModel, navController, it) }
+                    ?.let { userID ->
+                        PlaylistListView(playlistViewModel = playlistViewModel,
+                            musicalControlViewModel = musicalControlViewModel,
+                            navController = navController,
+                            userId = userID,
+                            sendAllPlaylist = {allPlaylist -> musicalControlViewModel.sendAllPlaylist(allPlaylist)},
+                            sendPlaylistById = {/*musicalControlViewModel.sendPlaylistById()*/}
+                        )
+                    }
         }
         composable(MusicalInternalAppRoute.RemovePlaylist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-                    ?.let { PlaylistListView(playlistViewModel, navController, it) }
+                    ?.let { userID ->
+                        PlaylistListView(playlistViewModel = playlistViewModel,
+                            musicalControlViewModel = musicalControlViewModel,
+                            navController = navController,
+                            userId = userID,
+                            sendAllPlaylist = {allPlaylist -> musicalControlViewModel.sendAllPlaylist(allPlaylist)},
+                            sendPlaylistById = {/*musicalControlViewModel.sendPlaylistById()*/}
+                        )
+                    }
         }
         composable(MusicalInternalAppRoute.LoadPlaylist.route,
             arguments = listOf(navArgument("playlistID"){type = NavType.StringType})){
                backStackEntry -> backStackEntry.arguments?.getString("playlistID")
-                   ?.let { idObtained -> MusicListView(playlistViewModel, navController, idObtained.toInt())}
+                   ?.let { idObtained ->
+                       MusicListView(playlistViewModel = playlistViewModel,
+                           navController = navController,
+                           playlistId = idObtained.toInt()
+                       )
+                   }
         }
         composable(MusicalInternalAppRoute.RemoveMusic.route,
             arguments = listOf(navArgument("playlistID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("playlistID")
-            ?.let { idObtained -> MusicListView(playlistViewModel, navController, idObtained.toInt())}
+            ?.let { idObtained ->
+                MusicListView(playlistViewModel = playlistViewModel,
+                    navController = navController,
+                    playlistId = idObtained.toInt()
+                )
+            }
         }
         composable(MusicalBarRoute.Settings.route){
-            SettingsView(modifier,
-                bluetoothViewModel,
+            SettingsView(modifier = modifier,
+                bluetoothViewModel = bluetoothViewModel,
                 onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
                 }
