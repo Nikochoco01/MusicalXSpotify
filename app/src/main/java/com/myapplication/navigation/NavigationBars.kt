@@ -19,7 +19,7 @@ import com.myapplication.ui.utils.MusicalIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavTopBar(modifier: Modifier, navController: NavHostController){
+fun NavTopBar(modifier: Modifier, navController: NavHostController, getOrder: () -> Unit){
     val backStackEntry = navController.currentBackStackEntryAsState()
     CenterAlignedTopAppBar(modifier = modifier.background(MaterialTheme.colorScheme.surface),
         title = {
@@ -87,7 +87,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
                     }
                 }
                 MusicalInternalAppRoute.RemovePlaylist.route -> {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { getOrder.invoke() }) {
                         Icon(
                             imageVector = MusicalIcons.iconDelete,
                             contentDescription = "Localized description"
