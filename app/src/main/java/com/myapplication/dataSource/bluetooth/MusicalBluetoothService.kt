@@ -10,20 +10,26 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
+import com.google.gson.Gson
+import com.myapplication.model.MusicalPlaylists
+import com.myapplication.repository.bluetooth.BluetoothCodeTransmissions
 import java.io.IOException
 import java.util.UUID
 
 class MusicalBluetoothService {
 	lateinit var bluetoothManager: BluetoothManager
 	lateinit var bluetoothAdapter: BluetoothAdapter
+	private lateinit var connectedSocket: BluetoothSocket
 	private lateinit var takePermission: ActivityResultLauncher<String>
 	private lateinit var takeResultLauncher: ActivityResultLauncher<Intent>
 
@@ -85,8 +91,10 @@ class MusicalBluetoothService {
 
 		try {
 			serverSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("MusicalXSpotify", serverUUID)!!
-			if(serverSocket != null)
+			if(serverSocket != null){
 				socket = serverSocket.accept()
+				connectedSocket = socket
+			}
 			return socket
 		}
 		catch (e:IOException){
@@ -123,21 +131,93 @@ class MusicalBluetoothService {
 			return isConnected(socket)
 		}
 		catch (e: IOException){
-			Log.e("Bluetooth error", "Connect to device error: $e")
-			return false
-		}
-		finally {
 			closeBluetoothSocket(socket)
+			Log.e("Bluetooth error", "Connect to device error: $e")
 			return false
 		}
 	}
 	fun isConnected(socket: BluetoothSocket): Boolean{
 		return socket.isConnected
 	}
+
+	/**
+	 * COMMUNICATION BETWEEN DEVICES
+	 **/
+
+	@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+	fun readOrders(): String{
+		var order: String
+		try {
+			order = connectedSocket.inputStream.readAllBytes().toString()
+			Log.e("error", "read order $order")
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to read command: $e")
+			order = "Fail to read"
+		}
+		return order
+	}
+	fun sendAllPlaylist(allPlaylist: List<MusicalPlaylists>){
+		try {
+			val gson = Gson()
+			val json = gson.toJson(allPlaylist)
+			val byteArray = json.toByteArray(Charsets.UTF_8)
+			connectedSocket.outputStream.write(byteArray)
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to get all playlist: $e")
+		}
+	}
+	fun sendPlaylistById(id: Int){
+		val command = BluetoothCodeTransmissions.GET_PLAYLIST_BY_ID.replace("{id}", id.toString())
+		try {
+			connectedSocket.outputStream.write(command.toByteArray())
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to get playlist n°$id: $e")
+		}
+	}
+	fun playMusic(){
+		val command = BluetoothCodeTransmissions.PLAY_MUSIC
+		try {
+			connectedSocket.outputStream.write(command.toByteArray())
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to play music: $e")
+		}
+	}
+	fun pauseMusic(){
+		val command = BluetoothCodeTransmissions.PAUSE_MUSIC
+		try {
+			connectedSocket.outputStream.write(command.toByteArray())
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to pause music: $e")
+		}
+	}
+	fun previousMusic(id: Int){
+		val command = BluetoothCodeTransmissions.PREVIOUS_MUSIC.replace("{id}", id.toString())
+		try {
+			connectedSocket.outputStream.write(command.toByteArray())
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to read the previous music: $e")
+		}
+	}
+	fun nextMusic(id: Int){
+		val command = BluetoothCodeTransmissions.NEXT_MUSIC.replace("{id}", id.toString())
+		try {
+			connectedSocket.outputStream.write(command.toByteArray())
+		}
+		catch (e: IOException){
+			Log.e("Bluetooth error", "Fail to read the next music: $e")
+		}
+	}
+
 	companion object {
 		private lateinit var instance: MusicalBluetoothService
 
-		fun initBluetoothManager(context: Context){
+		fun initBluetoothService(context: Context){
 			instance = MusicalBluetoothService()
 			instance.bluetoothManager = getSystemService(context , BluetoothManager::class.java)!!
 			instance.bluetoothAdapter = instance.bluetoothManager.adapter
