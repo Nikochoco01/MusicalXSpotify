@@ -11,6 +11,6 @@ class MusicalInitApp : Application() {
 
         MusicalDatabase.initDatabase(applicationContext)
         UserMusicalManager.initUserManager()
-        MusicalBluetoothService.initBluetoothManager(applicationContext)
+        MusicalBluetoothService.initBluetoothService(applicationContext)
     }
 }
