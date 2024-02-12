@@ -12,6 +12,7 @@ import com.myapplication.dataSource.bluetooth.MusicalBluetoothService
 import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
 import com.myapplication.viewModels.BluetoothViewModel
+import com.myapplication.viewModels.MusicalControlViewModel
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
     private val playlistViewModel : PlaylistViewModel by viewModels()
     private val usersViewModel : UsersViewModel by viewModels()
     private val bluetoothViewModel : BluetoothViewModel by viewModels()
+    private val musicalControlViewModel: MusicalControlViewModel by viewModels()
     private val userMusicalManager = UserMusicalManager.getInstance()
     private val musicalBluetoothManager = MusicalBluetoothService.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +42,8 @@ class MainActivity : ComponentActivity() {
                         playlistViewModel,
                         usersViewModel,
                         userMusicalManager,
-                        bluetoothViewModel
+                        bluetoothViewModel,
+                        musicalControlViewModel
                     )
                 }
             }
