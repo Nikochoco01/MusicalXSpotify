@@ -1,5 +1,7 @@
 package com.myapplication
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +21,7 @@ import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
 import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.viewModels.BluetoothViewModel
+import com.myapplication.viewModels.MusicalControlViewModel
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -29,7 +32,8 @@ fun MusicalApp(
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
     userMusicalManager: UserMusicalManager,
-    bluetoothViewModel: BluetoothViewModel
+    bluetoothViewModel: BluetoothViewModel,
+    musicalControlViewModel: MusicalControlViewModel
 ) {
     val navController = rememberNavController();
     val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
@@ -52,10 +56,12 @@ fun MusicalApp(
         usersViewModel = usersViewModel,
         navController = navController,
         userMusicalManager = userMusicalManager,
-        bluetoothViewModel = bluetoothViewModel
+        bluetoothViewModel = bluetoothViewModel,
+        musicalControlViewModel = musicalControlViewModel
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicalAppContent(
@@ -64,19 +70,20 @@ fun MusicalAppContent(
     usersViewModel: UsersViewModel,
     navController: NavHostController,
     userMusicalManager: UserMusicalManager,
-    bluetoothViewModel : BluetoothViewModel
+    bluetoothViewModel : BluetoothViewModel,
+    musicalControlViewModel: MusicalControlViewModel
 ) {
     Scaffold (
         topBar = {
             if(userMusicalManager.isConnected)
-                NavTopBar(modifier, navController)
+                NavTopBar(modifier, navController, getOrder = {musicalControlViewModel.readOrder()})
         },
         content = {paddingValues ->
             Box(
                 modifier
                     .fillMaxSize()
                     .padding(paddingValues) ){
-                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, bluetoothViewModel)
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, bluetoothViewModel, musicalControlViewModel)
             } },
         bottomBar = {
             if(userMusicalManager.isConnected)
