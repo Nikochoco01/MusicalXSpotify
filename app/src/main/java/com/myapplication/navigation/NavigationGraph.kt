@@ -14,6 +14,7 @@ import com.myapplication.ui.views.PlaylistListView
 import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
 import com.myapplication.ui.views.SubscribeView
+import com.myapplication.viewModels.BluetoothViewModel
 import com.myapplication.viewModels.UsersViewModel
 
 @Composable
@@ -21,7 +22,8 @@ fun NavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
     playlistViewModel: PlaylistViewModel,
-    usersViewModel: UsersViewModel
+    usersViewModel: UsersViewModel,
+    bluetoothViewModel: BluetoothViewModel
 ){
     NavHost(navController = navController,
         startDestination = MusicalInternalAppRoute.Login.route,
@@ -64,7 +66,8 @@ fun NavigationGraph(
             ?.let { idObtained -> MusicListView(playlistViewModel, navController, idObtained.toInt())}
         }
         composable(MusicalBarRoute.Settings.route){
-            SettingsView(modifier,
+            SettingsView(modifier = modifier,
+                bluetoothViewModel = bluetoothViewModel,
                 onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
                 }

@@ -18,6 +18,7 @@ import com.myapplication.navigation.NavBottomBar
 import com.myapplication.navigation.NavTopBar
 import com.myapplication.navigation.NavigationGraph
 import com.myapplication.repository.users.UserMusicalManager
+import com.myapplication.viewModels.BluetoothViewModel
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -27,7 +28,8 @@ fun MusicalApp(
     spotifyAPIViewModel: SpotifyAPIViewModel,
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
-    userMusicalManager: UserMusicalManager
+    userMusicalManager: UserMusicalManager,
+    bluetoothViewModel: BluetoothViewModel
 ) {
     val navController = rememberNavController();
     val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
@@ -48,7 +50,8 @@ fun MusicalApp(
         playlistViewModel = playlistViewModel,
         usersViewModel = usersViewModel,
         navController = navController,
-        userMusicalManager = userMusicalManager
+        userMusicalManager = userMusicalManager,
+        bluetoothViewModel = bluetoothViewModel
     )
 }
 
@@ -59,7 +62,8 @@ fun MusicalAppContent(
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
     navController: NavHostController,
-    userMusicalManager: UserMusicalManager
+    userMusicalManager: UserMusicalManager,
+    bluetoothViewModel: BluetoothViewModel
 ) {
     Scaffold (
         topBar = {
@@ -71,7 +75,7 @@ fun MusicalAppContent(
                 modifier
                     .fillMaxSize()
                     .padding(paddingValues) ){
-                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel)
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, bluetoothViewModel)
             } },
         bottomBar = {
             if(userMusicalManager.isConnected)
