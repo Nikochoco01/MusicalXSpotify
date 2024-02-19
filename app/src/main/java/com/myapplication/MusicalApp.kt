@@ -35,9 +35,6 @@ fun MusicalApp(
     if(userLogged != null){
         userMusicalManager.isConnected = true
         userMusicalManager.userID = userLogged!!.id!!
-        navController.navigate(MusicalBarRoute.Reader.route){
-            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
-        }
     }
     LaunchedEffect(Unit){
         usersViewModel.fetchUserByCredential("" , "")
