@@ -30,7 +30,6 @@ fun MusicalApp(
     userMusicalManager: UserMusicalManager
 ) {
     val navController = rememberNavController();
-    val token by spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
     val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState(initial = null)
 
     if(userLogged != null){
@@ -41,14 +40,14 @@ fun MusicalApp(
         }
     }
     LaunchedEffect(Unit){
-//        spotifyAPIViewModel.fetchSpotifyToken()
         usersViewModel.fetchUserByCredential("" , "")
     }
     MusicalAppContent(
         playlistViewModel = playlistViewModel,
         usersViewModel = usersViewModel,
         navController = navController,
-        userMusicalManager = userMusicalManager
+        userMusicalManager = userMusicalManager,
+        spotifyAPIViewModel = spotifyAPIViewModel
     )
 }
 
@@ -59,7 +58,8 @@ fun MusicalAppContent(
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
     navController: NavHostController,
-    userMusicalManager: UserMusicalManager
+    userMusicalManager: UserMusicalManager,
+    spotifyAPIViewModel: SpotifyAPIViewModel
 ) {
     Scaffold (
         topBar = {
@@ -71,7 +71,7 @@ fun MusicalAppContent(
                 modifier
                     .fillMaxSize()
                     .padding(paddingValues) ){
-                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel)
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, spotifyAPIViewModel)
             } },
         bottomBar = {
             if(userMusicalManager.isConnected)
