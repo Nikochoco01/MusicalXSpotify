@@ -67,7 +67,7 @@ class UsersViewModel : ViewModel() {
                     .catch {
                         Log.e("Fetch error" , it.toString())
                     }.collect{
-                        Log.e("error", "View model $it")
+                        Log.e("error", "User is update $it")
                         _musicalUsersUpdated.postValue(it)
                     }
             }
@@ -86,7 +86,19 @@ class UsersViewModel : ViewModel() {
             }
         }
     }
-
+    fun fetchMusicalUserByMusicalID(id: Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                UsersMusicalRepository.getExistingUserByMusicalUserID(id)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }
+                    .collect{
+                        _musicalUsersLiveData.postValue(it)
+                    }
+            }
+        }
+    }
 //    fun fetchSpotifyUserBySpotifyID(id : String){
 //        viewModelScope.launch {
 //            withContext(Dispatchers.IO){
@@ -96,19 +108,6 @@ class UsersViewModel : ViewModel() {
 //                    }
 //                    .collect{
 //                        _spotifyUsersLiveData.postValue(it)
-//                    }
-//            }
-//        }
-//    }
-//    fun fetchMusicalUserByMusicalID(id: Int){
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO){
-//                UsersMusicalRepository.getExistingUserByMusicalUserID(id)
-//                    .catch {
-//                        Log.e("Fetch error" , it.toString())
-//                    }
-//                    .collect{
-//                        _musicalUsersLiveData.postValue(it)
 //                    }
 //            }
 //        }
