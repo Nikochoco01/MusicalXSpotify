@@ -2,6 +2,8 @@ package com.myapplication.navigation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -26,6 +28,16 @@ fun NavigationGraph(
     usersViewModel: UsersViewModel,
     spotifyAPIViewModel: SpotifyAPIViewModel
 ){
+    var spotifyToken = spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
+
+    LaunchedEffect(spotifyToken){
+        if(spotifyToken.value != null){
+            Log.e("error", "SpotifyToken ${spotifyAPIViewModel.spotifyTokenLiveData.value}")
+            navController.navigate(MusicalBarRoute.Reader.route){
+            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true } }
+        }
+    }
+
     NavHost(navController = navController,
         startDestination = MusicalInternalAppRoute.Login.route,
         modifier = modifier){
@@ -35,25 +47,26 @@ fun NavigationGraph(
                 onLoginSuccess = { userLogged ->
                     if (userLogged != null) {
                         if(userLogged.spotifyUsersID != null){
-                            Log.e("error", "spotify ID ${userLogged.spotifyUsersID}")
-                            spotifyAPIViewModel.fetchSpotifyToken()
+                            Log.e("error", "call spotify")
+//                            spotifyAPIViewModel.fetchSpotifyToken()
                         }
-                        navController.navigate(MusicalBarRoute.Reader.route){
-                            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
-                        }
+                        Log.e("error", "OnLoginSuccess")
                     }
-                })
+                }
+            )
+            Log.e("error", "Call composable")
         }
         composable(MusicalInternalAppRoute.Subscribe.route){
             SubscribeView(modifier, usersViewModel,
                 onNavigateToLogin = { navController.navigate(MusicalInternalAppRoute.Login.route)},
                 onRegistrationSuccess = { navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalInternalAppRoute.Subscribe.route) { inclusive = true }
-                } })
+                } }
+            )
         }
-        composable(MusicalBarRoute.Reader.route){
-            ReaderView(modifier)
-        }
+//        composable(MusicalBarRoute.Reader.route){
+//            ReaderView(modifier)
+//        }
         composable(MusicalBarRoute.Playlist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
@@ -76,11 +89,12 @@ fun NavigationGraph(
         }
         composable(MusicalBarRoute.Settings.route){
             SettingsView(modifier,
+                usersViewModel = usersViewModel,
+                spotifyAPIViewModel = spotifyAPIViewModel,
                 onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
                 }
             })
-            usersViewModel.fetchUserByCredential("", "")
         }
     }
 }
