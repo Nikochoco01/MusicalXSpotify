@@ -1,5 +1,6 @@
 package com.myapplication.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -14,6 +15,7 @@ import com.myapplication.ui.views.PlaylistListView
 import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
 import com.myapplication.ui.views.SubscribeView
+import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.UsersViewModel
 
 @Composable
@@ -21,7 +23,8 @@ fun NavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
     playlistViewModel: PlaylistViewModel,
-    usersViewModel: UsersViewModel
+    usersViewModel: UsersViewModel,
+    spotifyAPIViewModel: SpotifyAPIViewModel
 ){
     NavHost(navController = navController,
         startDestination = MusicalInternalAppRoute.Login.route,
@@ -29,9 +32,17 @@ fun NavigationGraph(
         composable(MusicalInternalAppRoute.Login.route){
             LoginView(modifier, usersViewModel,
                 onNavigateToSubscribe = {navController.navigate(MusicalInternalAppRoute.Subscribe.route)},
-                onLoginSuccess = { navController.navigate(MusicalBarRoute.Reader.route){
-                    popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
-                } })
+                onLoginSuccess = { userLogged ->
+                    if (userLogged != null) {
+                        if(userLogged.spotifyUsersID != null){
+                            Log.e("error", "spotify ID ${userLogged.spotifyUsersID}")
+                            spotifyAPIViewModel.fetchSpotifyToken()
+                        }
+                        navController.navigate(MusicalBarRoute.Reader.route){
+                            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
+                        }
+                    }
+                })
         }
         composable(MusicalInternalAppRoute.Subscribe.route){
             SubscribeView(modifier, usersViewModel,

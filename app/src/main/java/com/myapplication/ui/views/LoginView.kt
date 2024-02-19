@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.myapplication.model.users.MusicalUsers
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.UsersViewModel
@@ -33,7 +34,7 @@ fun LoginView(
     modifier: Modifier,
     usersViewModel: UsersViewModel,
     onNavigateToSubscribe: () -> Unit,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: (MusicalUsers?) -> Unit
 ){
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -84,9 +85,9 @@ fun LoginView(
                 if(email.isNotBlank() && email.isNotEmpty() && password.isNotBlank() && password.isNotEmpty()){
                     usersViewModel.fetchUserByCredential(email, password)
                 }
-//                if(userLogged?.mail == email && userLogged?.password == password){
-//                    onLoginSuccess.invoke()
-//                }
+                if(userLogged?.mail == email && userLogged?.password == password){
+                    onLoginSuccess.invoke(userLogged)
+                }
             },
                 modifier
                     .width(144.dp)
