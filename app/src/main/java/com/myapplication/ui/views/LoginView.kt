@@ -1,5 +1,6 @@
 package com.myapplication.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +40,15 @@ fun LoginView(
 ){
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState(initial = null)
+    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState()
+
+    LaunchedEffect(userLogged){
+        if(userLogged != null){
+            if(userLogged?.mail == email && userLogged?.password == password){
+                onLoginSuccess.invoke(userLogged)
+            }
+        }
+    }
 
     Column(
         modifier
@@ -84,9 +94,7 @@ fun LoginView(
             Button(onClick = {
                 if(email.isNotBlank() && email.isNotEmpty() && password.isNotBlank() && password.isNotEmpty()){
                     usersViewModel.fetchUserByCredential(email, password)
-                }
-                if(userLogged?.mail == email && userLogged?.password == password){
-                    onLoginSuccess.invoke(userLogged)
+                    Log.e("error", "User is fetched")
                 }
             },
                 modifier
