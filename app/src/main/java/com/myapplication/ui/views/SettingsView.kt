@@ -1,5 +1,6 @@
 package com.myapplication.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,19 +8,39 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.myapplication.R
+import com.myapplication.model.users.MusicalUsers
 import com.myapplication.ui.components.MusicalSettingItem
+import com.myapplication.ui.components.SpotifyDialog
 import com.myapplication.ui.utils.MusicalIcons
+import com.myapplication.viewModels.SpotifyAPIViewModel
+import com.myapplication.viewModels.UsersViewModel
 
 @Composable
 fun SettingsView(
     modifier: Modifier = Modifier,
+    spotifyAPIViewModel: SpotifyAPIViewModel,
+    usersViewModel: UsersViewModel,
     onNavigate: () -> Unit
 ){
+    val userLogged = usersViewModel.musicalUsersLiveData.observeAsState(initial = null)
+    val userUpdated = usersViewModel.musicalUsersUpdated.observeAsState()
+    val showSpotifyDialog = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit){
+//        usersViewModel.fetchMusicalUserByMusicalID(1)
+    }
     Column (
-        modifier.fillMaxSize().padding(16.dp),
+        modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
         MusicalSettingItem(modifier = modifier,
@@ -36,8 +57,22 @@ fun SettingsView(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             icon = MusicalIcons.iconArrowRight,
             iconDescription = R.string.icon_arrow_right,
-            onClickable = {}
+            onClickable = {showSpotifyDialog.value = true}
         )
+        if(showSpotifyDialog.value){
+            SpotifyDialog(modifier = modifier,
+                onSaveRequest = {spotifyUserID ->
+                    if(userLogged.value != null){
+                        userLogged.value?.spotifyUsersID = spotifyUserID
+                        usersViewModel.updateMusicalUser(userLogged.value!!)
+                        Log.e("error", "Update ${userUpdated.value}")
+                        if(userUpdated.value == true){
+                            showSpotifyDialog.value = false
+                        }
+                    }
+                },
+                onDismissRequest = {showSpotifyDialog.value = false})
+        }
         MusicalSettingItem(modifier = modifier,
             textItem = R.string.setting_bluetooth,
             textColor = MaterialTheme.colorScheme.onSurfaceVariant,
