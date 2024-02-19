@@ -31,11 +31,11 @@ fun SettingsView(
     onNavigate: () -> Unit
 ){
     val userLogged = usersViewModel.musicalUsersLiveData.observeAsState(initial = null)
-    val userUpdated = usersViewModel.musicalUsersUpdated.observeAsState()
+    val userUpdated = usersViewModel.musicalUsersUpdated.observeAsState(initial = false)
     val showSpotifyDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit){
-//        usersViewModel.fetchMusicalUserByMusicalID(1)
+        usersViewModel.fetchMusicalUserByMusicalID(1)
     }
     Column (
         modifier
@@ -65,8 +65,8 @@ fun SettingsView(
                     if(userLogged.value != null){
                         userLogged.value?.spotifyUsersID = spotifyUserID
                         usersViewModel.updateMusicalUser(userLogged.value!!)
-                        Log.e("error", "Update ${userUpdated.value}")
-                        if(userUpdated.value == true){
+                        Log.e("error", "Update Value ${userUpdated.value}")
+                        if(userUpdated.value){
                             showSpotifyDialog.value = false
                         }
                     }
