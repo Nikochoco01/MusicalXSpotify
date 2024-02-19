@@ -10,15 +10,15 @@ import com.myapplication.model.users.MusicalUsers
 @Dao
 interface MusicalUsersDAO{
     @Insert
-    fun insertNewUser(user: MusicalUsers)
+    fun insertNewUser(user: MusicalUsers): Long
     @Update
-    fun updateExistingUser(user: MusicalUsers)
+    fun updateExistingUser(user: MusicalUsers) : Int
     @Delete
-    fun deleteExistingUser(users: MusicalUsers)
+    fun deleteExistingUser(users: MusicalUsers) : Int
     @Query("SELECT * FROM MusicalUsers WHERE mail == :email AND password == :password LIMIT 1")
     fun getExitingUserByCredentials(email: String , password: String) : MusicalUsers?
     @Query("SELECT * FROM MusicalUsers WHERE id == :userID LIMIT 1")
     fun getExistingUserByMusicalUserID(userID: Int) : MusicalUsers?
     @Query("SELECT * FROM MusicalUsers WHERE spotifyUsersID == :spotifyID LIMIT 1")
-    fun getExistingUserBySpotifyUserID(spotifyID: Int) : MusicalUsers?
+    fun getExistingUserBySpotifyUserID(spotifyID: String) : MusicalUsers?
 }
