@@ -7,18 +7,41 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 object UsersMusicalRepository {
-
     suspend fun getUsersByCredentials(email: String , password : String) : Flow<MusicalUsers?> = flow {
         emit(MusicalDatabaseSource.getExitingUserByCredentials(email, password))
     }
 
-    fun createMusicalUser(pseudo: String, email: String, password: String){
+    fun createMusicalUser(pseudo: String, email: String, password: String): Flow<Boolean> = flow{
         val user = MusicalUsers(pseudo, email, password, null)
-        MusicalDatabaseSource.insertNewUser(user)
+        val result = MusicalDatabaseSource.insertNewUser(user)
+        // -1 operation failed ... !-1 operation success
+        if(result.toInt() == -1)
+            emit(false)
+        else
+            emit(true)
     }
 
-    suspend fun getUsersDetails(id: String) : Flow<Response<MusicalUsers>> = flow {
-       // emit()
+    fun updateExistingUser(user: MusicalUsers): Flow<Boolean> = flow{
+        val result = MusicalDatabaseSource.updateExistingUser(user)
+        if(result > 0)
+            emit(true)
+        else
+            emit(false)
+    }
+
+    suspend fun getExistingUserByMusicalUserID(id: Int) : Flow<MusicalUsers?> = flow {
+        emit(MusicalDatabaseSource.getExistingUserByMusicalUserID(id))
+    }
+    suspend fun getExistingUserBySpotifyUserID(id: String) : Flow<MusicalUsers?> = flow {
+        emit(MusicalDatabaseSource.getExistingUserBySpotifyUserID(id))
+    }
+
+    fun deleteExistingUser(user: MusicalUsers): Flow<Boolean> = flow{
+        val result = MusicalDatabaseSource.deleteExistingUser(user)
+        if(result == 0)
+            emit(false)
+        else
+            emit(true)
     }
 
 // var listener: MutableLiveData<Response<SpotifyUsers>> = MutableLiveData()
