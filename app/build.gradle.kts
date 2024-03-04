@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -43,6 +43,7 @@ android {
             dimension = "environment"
 //            applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
+            buildConfigField("Boolean", "IS_DEVELOP_BUILD", "true")
             buildConfigField("String", "GRANT_TYPE", "\"client_credentials\"")
             buildConfigField("String", "CLIENT_ID", "\"97e4ffd132de48b994e860461e571c6a\"")
             buildConfigField("String", "CLIENT_SECRET", "\"633a5550b7374b63939eeef8dbc0a091\"")
@@ -51,6 +52,7 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".prod"
             versionNameSuffix = "-prod"
+            buildConfigField("Boolean", "IS_DEVELOP_BUILD", "false")
             buildConfigField("String", "GRANT_TYPE", "\"client_credentials\"")
             buildConfigField("String", "CLIENT_ID", "\"97e4ffd132de48b994e860461e571c6a\"")
             buildConfigField("String", "CLIENT_SECRET", "\"633a5550b7374b63939eeef8dbc0a091\"")
@@ -90,6 +92,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.runtime:runtime-livedata:1.3.3")
 
+    //Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -97,6 +102,7 @@ dependencies {
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
     // ROOM
     val roomVersion = "2.5.0"
