@@ -26,4 +26,8 @@
     <string name="icon_logout">icon logout</string>
     <string name="icon_login">icon login</string>
     <string name="icon_arrow_right">Arrow Right</string>
+
+    <string name="application_logo">MusicalXSpotifyLogo</string>
+    <string name="application_build_debug">debug build</string>
+    <string name="application_build_release">release build</string>
 </resources>
