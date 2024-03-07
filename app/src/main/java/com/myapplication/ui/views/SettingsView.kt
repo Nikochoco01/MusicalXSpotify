@@ -31,11 +31,26 @@ fun SettingsView(
     onNavigate: () -> Unit
 ){
     val userLogged = usersViewModel.musicalUsersLiveData.observeAsState(initial = null)
+    val userSpotify = usersViewModel.spotifyUsersRecover.observeAsState(initial = null)
     val userUpdated = usersViewModel.musicalUsersUpdated.observeAsState(initial = false)
     val showSpotifyDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit){
         usersViewModel.fetchMusicalUserByMusicalID(1)
+
+        usersViewModel.fetchSpotifyUserBySpotifyID(
+            "BQCwx77mh-TrDGxnuuLWHL5rXZQMX5b9xDzESjMSbcML0TNlfNzujzmeEJN-_EAt43plHz55eD8qHfNHMaqrUYXCQI68jrc1fD9A9ZSeDdx4ohhK5jw",
+            "31noc2ncy5jd6vj6ylnbx5xddgcu")
+
+//        if(userLogged != null){
+//            Log.e("error", "Local user id: ${userLogged.value?.id}  spotifyID: ${userLogged.value?.spotifyUsersID}")
+////            if(userLogged?.value?.spotifyUsersID != null){
+////
+////
+////                Log.e("error", "1 User Spotify ${userSpotify.value}")
+////            }
+//
+//        }
     }
     Column (
         modifier
