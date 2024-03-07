@@ -34,14 +34,7 @@ fun PlaylistListView(
 ){
     LaunchedEffect(Unit){
         playlistViewModel.fetchAllPlaylists(userId)
-        playlistViewModel.fetchAllSpotifyPlaylist(
-            "31noc2ncy5jd6vj6ylnbx5xddgcu",
-            "BQDQ0VxuntUVY8Nfrz7QTsbYuOWVRbqmrcxZOHEQGDsBnOub0PG7b2UnBhAqNIWzqbp52ydw_leAe4U2mgjtkhhDzxy2a9evA_5IbAVyLZF1uGp1rMA")
     }
-
-    val spotifyPlaylist by playlistViewModel.spotifyResultPlaylists.observeAsState()
-
-    Log.e("error", "playlists spotify ${spotifyPlaylist?.playlists}")
 
     var context = LocalContext.current
     val permissionRecovered by phoneManagerViewModel.initPermission.observeAsState()
