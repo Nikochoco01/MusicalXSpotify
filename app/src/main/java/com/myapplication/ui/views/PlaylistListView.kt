@@ -1,6 +1,7 @@
 package com.myapplication.ui.views
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -28,10 +29,17 @@ fun PlaylistListView(
 ){
     LaunchedEffect(Unit){
         playlistViewModel.fetchAllPlaylists(userId)
+        playlistViewModel.fetchAllSpotifyPlaylist(
+            "31noc2ncy5jd6vj6ylnbx5xddgcu",
+            "BQDQ0VxuntUVY8Nfrz7QTsbYuOWVRbqmrcxZOHEQGDsBnOub0PG7b2UnBhAqNIWzqbp52ydw_leAe4U2mgjtkhhDzxy2a9evA_5IbAVyLZF1uGp1rMA")
     }
     val gotLiveData by playlistViewModel.playlistsLiveData.observeAsState(
         initial = emptyList()
     )
+
+    val spotifyPlaylist by playlistViewModel.spotifyResultPlaylists.observeAsState()
+
+    Log.e("error", "playlists spotify ${spotifyPlaylist?.playlists}")
 
     if(gotLiveData == null){
         AlertDialog(
