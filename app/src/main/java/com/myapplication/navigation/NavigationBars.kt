@@ -34,13 +34,14 @@ fun NavTopBar(modifier: Modifier,
                 MusicalInternalAppRoute.RemovePlaylist.route -> MusicalInternalAppRoute.RemovePlaylist.routeName
                 MusicalInternalAppRoute.RemoveMusic.route -> MusicalInternalAppRoute.RemoveMusic.routeName
                 MusicalInternalAppRoute.LoadPlaylist.route -> MusicalInternalAppRoute.LoadPlaylist.routeName
+                MusicalInternalAppRoute.LoadSpotifyPlaylist.route -> MusicalInternalAppRoute.LoadSpotifyPlaylist.routeName
                 MusicalBarRoute.Reader.route -> MusicalBarRoute.Reader.routeName
                 MusicalBarRoute.Playlist.route -> MusicalBarRoute.Playlist.routeName
                 MusicalBarRoute.Settings.route -> MusicalBarRoute.Settings.routeName
-                else -> "Title no undefined"
+                else -> "Title undefined"
             }
             Text(text)
-                },
+        },
         navigationIcon = {
             when(backStackEntry.value?.destination?.route){
                 MusicalInternalAppRoute.RemovePlaylist.route -> {
@@ -121,6 +122,10 @@ fun NavTopBar(modifier: Modifier,
                     importPlaylist = {
                         onPermission.invoke()
                         onImport.invoke()
+                        menuIsExtended.value = false
+                    },
+                    findSpotifyPlaylist = {
+                        navController.navigate(MusicalInternalAppRoute.LoadSpotifyPlaylist.route)
                         menuIsExtended.value = false
                     }
                 )
