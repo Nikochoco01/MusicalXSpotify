@@ -1,7 +1,7 @@
 package com.myapplication.model
 
 data class Musics(
-    val id: Int,
+    val id: String,
     val images: String,
     val name: String,
     val album: String,
