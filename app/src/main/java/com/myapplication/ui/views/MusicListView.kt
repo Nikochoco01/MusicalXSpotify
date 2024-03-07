@@ -30,8 +30,8 @@ fun MusicListView(
         playlistViewModel.fetchPlaylistByID(playlistId)
     }
 
-    val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(
-        initial = MusicalPlaylists("0", "", "", emptyList()))
+    val gotLiveData by playlistViewModel.playlistPhoneById.observeAsState(
+        initial = MusicalPlaylists(0, "", "", emptyList()))
 
         if(gotLiveData == null){
             AlertDialog(
