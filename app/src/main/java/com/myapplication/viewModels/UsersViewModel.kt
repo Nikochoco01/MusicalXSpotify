@@ -26,7 +26,7 @@ class UsersViewModel : ViewModel() {
     val musicalUsersRemoved : LiveData<Boolean> = _musicalUsersRemoved
 
     private var _spotifyUsersLiveData : MutableLiveData<Response<SpotifyUsers>?> = MutableLiveData<Response<SpotifyUsers>?>()
-    val spotifyUsersLiveData : LiveData<Response<SpotifyUsers>?> = _spotifyUsersLiveData
+    val spotifyUsersRecover : LiveData<Response<SpotifyUsers>?> = _spotifyUsersLiveData
 
     private var _musicalUsersLiveData : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
     val musicalUsersLiveData : LiveData<MusicalUsers?> = _musicalUsersLiveData
@@ -67,7 +67,6 @@ class UsersViewModel : ViewModel() {
                     .catch {
                         Log.e("Fetch error" , it.toString())
                     }.collect{
-                        Log.e("error", "User is update $it")
                         _musicalUsersUpdated.postValue(it)
                     }
             }
@@ -99,17 +98,18 @@ class UsersViewModel : ViewModel() {
             }
         }
     }
-//    fun fetchSpotifyUserBySpotifyID(id : String){
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO){
-//                UsersSpotifyRepository.getSpotifyUsers(id)
-//                    .catch {
-//                        Log.e("Fetch error" , it.toString())
-//                    }
-//                    .collect{
-//                        _spotifyUsersLiveData.postValue(it)
-//                    }
-//            }
-//        }
-//    }
+    fun fetchSpotifyUserBySpotifyID(token: String, id : String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                var validToken = "Bearer $token"
+                UsersSpotifyRepository.getSpotifyUsers(validToken, id)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }
+                    .collect{
+                        _spotifyUsersLiveData.postValue(it)
+                    }
+            }
+        }
+    }
 }
