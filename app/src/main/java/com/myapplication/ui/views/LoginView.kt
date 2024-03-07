@@ -94,7 +94,6 @@ fun LoginView(
             Button(onClick = {
                 if(email.isNotBlank() && email.isNotEmpty() && password.isNotBlank() && password.isNotEmpty()){
                     usersViewModel.fetchUserByCredential(email, password)
-                    Log.e("error", "User is fetched")
                 }
             },
                 modifier
