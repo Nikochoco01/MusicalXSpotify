@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myapplication.model.MusicalPlaylists
+import com.myapplication.model.SpotifyResultPlaylist
 import com.myapplication.repository.playlists.PlaylistRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -17,9 +18,12 @@ class PlaylistViewModel : ViewModel(){
     private var _playlistsLiveData : MutableLiveData<List<MusicalPlaylists>> = MutableLiveData<List<MusicalPlaylists>>()
     val playlistsLiveData : LiveData<List<MusicalPlaylists>> = _playlistsLiveData
 
+    private var _spotifyResultPlaylistsLiveData : MutableLiveData<SpotifyResultPlaylist> = MutableLiveData<SpotifyResultPlaylist>()
+    val spotifyResultPlaylists : LiveData<SpotifyResultPlaylist> = _spotifyResultPlaylistsLiveData
+
     fun fetchPhoneFilePlaylist(id: Int){
         viewModelScope.launch {
-            PlaylistRepository.getPlaylist(id)
+            PlaylistRepository.getPlaylistByID(id)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }
@@ -31,14 +35,27 @@ class PlaylistViewModel : ViewModel(){
     }
 
     fun fetchAllPlaylists(userId: String){
-        Log.e("Test Call" , "CALL Playlist");
         viewModelScope.launch {
-            PlaylistRepository.getPlaylists(userId)
+            PlaylistRepository.getAllPhonePlaylists(userId)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }
                 .collect{
                     _playlistsLiveData.postValue(it)
+                }
+        }
+    }
+
+    fun fetchAllSpotifyPlaylist(userId: String, token: String){
+        viewModelScope.launch {
+            var validToken = "Bearer $token"
+            PlaylistRepository.getAllSpotifyPlaylists(userId, validToken)
+                .catch {
+                    Log.e("playlist error" , it.toString())
+                }
+                .collect{
+                    Log.e("error" , "Result success ${it.isSuccessful}  Body ${it.body()}")
+                    _spotifyResultPlaylistsLiveData.postValue(it.body())
                 }
         }
     }
