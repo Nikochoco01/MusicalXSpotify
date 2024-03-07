@@ -14,6 +14,7 @@ import com.myapplication.ui.views.LoginView
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.ui.views.MusicListView
 import com.myapplication.ui.views.PlaylistListView
+import com.myapplication.ui.views.PlaylistSpotifyView
 import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
 import com.myapplication.ui.views.SubscribeView
@@ -72,6 +73,11 @@ fun NavigationGraph(
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
                     ?.let { PlaylistListView(phoneManagerViewModel, playlistViewModel, navController, it) }
+        }
+        composable(MusicalInternalAppRoute.LoadSpotifyPlaylist.route,
+            arguments = listOf(navArgument("userID"){type = NavType.StringType})){
+                backStackEntry -> backStackEntry.arguments?.getString("userID")
+            ?.let { PlaylistSpotifyView(playlistViewModel, navController, it) }
         }
         composable(MusicalInternalAppRoute.RemovePlaylist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
