@@ -33,8 +33,6 @@ fun NavigationGraph(
     LaunchedEffect(spotifyToken){
         if(spotifyToken.value != null){
             Log.e("error", "SpotifyToken ${spotifyAPIViewModel.spotifyTokenLiveData.value}")
-            navController.navigate(MusicalBarRoute.Reader.route){
-            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true } }
         }
     }
 
@@ -51,10 +49,11 @@ fun NavigationGraph(
 //                            spotifyAPIViewModel.fetchSpotifyToken()
                         }
                         Log.e("error", "OnLoginSuccess")
+                        navController.navigate(MusicalBarRoute.Reader.route){
+                            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true } }
                     }
                 }
             )
-            Log.e("error", "Call composable")
         }
         composable(MusicalInternalAppRoute.Subscribe.route){
             SubscribeView(modifier, usersViewModel,
@@ -64,9 +63,9 @@ fun NavigationGraph(
                 } }
             )
         }
-//        composable(MusicalBarRoute.Reader.route){
-//            ReaderView(modifier)
-//        }
+        composable(MusicalBarRoute.Reader.route){
+            ReaderView(modifier)
+        }
         composable(MusicalBarRoute.Playlist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
