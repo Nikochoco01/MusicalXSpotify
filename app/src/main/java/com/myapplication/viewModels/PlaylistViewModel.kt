@@ -1,5 +1,7 @@
 package com.myapplication.viewModels
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,28 +10,46 @@ import androidx.lifecycle.viewModelScope
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.model.SpotifyResultPlaylist
 import com.myapplication.repository.playlists.PlaylistRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlaylistViewModel : ViewModel(){
-    private var _phoneFileLiveData : MutableLiveData<MusicalPlaylists> = MutableLiveData<MusicalPlaylists>()
-    val phoneFileLiveData : LiveData<MusicalPlaylists> = _phoneFileLiveData
+    private var _createPlaylistLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val createPlaylistLiveData: LiveData<Boolean> = _createPlaylistLiveData
 
-    private var _playlistsLiveData : MutableLiveData<List<MusicalPlaylists>> = MutableLiveData<List<MusicalPlaylists>>()
-    val playlistsLiveData : LiveData<List<MusicalPlaylists>> = _playlistsLiveData
+    private var _playlistPhoneById : MutableLiveData<MusicalPlaylists> = MutableLiveData<MusicalPlaylists>()
+    val playlistPhoneById : LiveData<MusicalPlaylists> = _playlistPhoneById
 
     private var _spotifyResultPlaylistsLiveData : MutableLiveData<SpotifyResultPlaylist> = MutableLiveData<SpotifyResultPlaylist>()
     val spotifyResultPlaylists : LiveData<SpotifyResultPlaylist> = _spotifyResultPlaylistsLiveData
 
-    fun fetchPhoneFilePlaylist(id: Int){
+    private var _allPhonePlaylists : MutableLiveData<List<MusicalPlaylists>> = MutableLiveData<List<MusicalPlaylists>>()
+    val allPhonePlaylists : LiveData<List<MusicalPlaylists>> = _allPhonePlaylists
+
+    fun createPlaylist(context: Context, fileUri: Uri){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                PlaylistRepository.createPlaylist(context, fileUri)
+                    .catch {
+                        Log.e("playlist error", it.toString())
+                    }
+                    .collect{
+                        _createPlaylistLiveData.postValue(it)
+                    }
+            }
+        }
+    }
+
+    fun fetchPlaylistByID(id: Int){
         viewModelScope.launch {
             PlaylistRepository.getPlaylistByID(id)
                 .catch {
                     Log.e("playlist error" , it.toString())
                 }
                 .collect{
-                    _phoneFileLiveData.postValue(it)
-                    Log.e("Test Call" , "CALL Music");
+                    _playlistPhoneById.postValue(it)
                 }
         }
     }
@@ -41,7 +61,7 @@ class PlaylistViewModel : ViewModel(){
                     Log.e("playlist error" , it.toString())
                 }
                 .collect{
-                    _playlistsLiveData.postValue(it)
+                    _allPhonePlaylists.postValue(it)
                 }
         }
     }

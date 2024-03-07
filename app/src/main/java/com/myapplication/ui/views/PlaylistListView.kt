@@ -1,6 +1,5 @@
 package com.myapplication.ui.views
 
-
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.myapplication.viewModels.PlaylistViewModel
@@ -20,9 +23,11 @@ import com.myapplication.model.MusicalPlaylists
 import com.myapplication.navigation.MusicalRoute
 import com.myapplication.ui.components.PlaylistListItem
 import com.myapplication.ui.components.PlaylistListItemSelected
+import com.myapplication.viewModels.PhoneManagerViewModel
 
 @Composable
 fun PlaylistListView(
+    phoneManagerViewModel: PhoneManagerViewModel,
     playlistViewModel: PlaylistViewModel,
     navController: NavController,
     userId: String
@@ -33,15 +38,56 @@ fun PlaylistListView(
             "31noc2ncy5jd6vj6ylnbx5xddgcu",
             "BQDQ0VxuntUVY8Nfrz7QTsbYuOWVRbqmrcxZOHEQGDsBnOub0PG7b2UnBhAqNIWzqbp52ydw_leAe4U2mgjtkhhDzxy2a9evA_5IbAVyLZF1uGp1rMA")
     }
-    val gotLiveData by playlistViewModel.playlistsLiveData.observeAsState(
-        initial = emptyList()
-    )
 
     val spotifyPlaylist by playlistViewModel.spotifyResultPlaylists.observeAsState()
 
     Log.e("error", "playlists spotify ${spotifyPlaylist?.playlists}")
 
-    if(gotLiveData == null){
+    var context = LocalContext.current
+    val permissionRecovered by phoneManagerViewModel.initPermission.observeAsState()
+    val selectedDirectory by phoneManagerViewModel.phoneFileRecovered.observeAsState()
+    val playlistIsCreate by playlistViewModel.createPlaylistLiveData.observeAsState(initial = false)
+    val allPlaylists by playlistViewModel.allPhonePlaylists.observeAsState(
+        initial = emptyList()
+    )
+    var oldPermission by remember{ mutableStateOf(permissionRecovered) }
+    var oldSelectedDirectory by remember{ mutableStateOf(selectedDirectory) }
+    var oldPlaylistIsCreate by remember{ mutableStateOf(playlistIsCreate) }
+    var oldAllPlaylists by remember{ mutableStateOf(allPlaylists) }
+
+    Log.e("error", "Permission: $permissionRecovered")
+    Log.e("error", "File recovered: $selectedDirectory")
+    Log.e("error", "Playlist is create: $playlistIsCreate")
+    Log.e("error", "All playlist loaded: $allPlaylists")
+
+    Log.e("error", "remb Permission: $oldPermission")
+    Log.e("error", "remb File recovered: $selectedDirectory")
+    Log.e("error", "remb Playlist is create: $oldPlaylistIsCreate")
+    Log.e("error", "remb All playlist loaded: $oldAllPlaylists")
+
+//    if(permissionGot){
+//        Log.e("error", "Permission allowed")
+//    }
+
+//    LaunchedEffect(Unit){
+//        phoneManagerViewModel.initPermission()
+//        if(oldSelectedDirectory != selectedDirectory){
+//            phoneManagerViewModel.getPhoneFile()
+//            oldSelectedDirectory = selectedDirectory
+//        }
+//    }
+
+    if(oldSelectedDirectory != selectedDirectory){
+        playlistViewModel.createPlaylist(context, selectedDirectory!!)
+        Log.e("error", "SELECT playlist create $playlistIsCreate")
+    }
+
+    if(playlistIsCreate){
+        Log.e("error", "IS CREATE all playlist $allPlaylists")
+        playlistViewModel.fetchAllPlaylists(userId)
+    }
+
+    if(allPlaylists == null){
         AlertDialog(
             title = { Text(text = "No playlist") },
             text = { Text(text = "You haven't any playlist") },
@@ -50,9 +96,9 @@ fun PlaylistListView(
     }
     else{
         if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.PLAYLIST_REMOVE)
-            PlaylistsListRemove(navController,gotLiveData)
+            PlaylistsListRemove(allPlaylists)
         else
-            PlaylistsList(navController, gotLiveData)
+            PlaylistsList(navController, allPlaylists)
     }
 }
 
@@ -79,7 +125,6 @@ fun PlaylistsList(
 
 @Composable
 fun PlaylistsListRemove(
-    navController: NavController,
     playlists : List<MusicalPlaylists>
 ){
     LazyVerticalGrid(

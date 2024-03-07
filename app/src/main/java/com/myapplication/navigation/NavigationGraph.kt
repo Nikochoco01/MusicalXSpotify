@@ -18,6 +18,7 @@ import com.myapplication.ui.views.ReaderView
 import com.myapplication.ui.views.SettingsView
 import com.myapplication.ui.views.SubscribeView
 import com.myapplication.viewModels.SpotifyAPIViewModel
+import com.myapplication.viewModels.PhoneManagerViewModel
 import com.myapplication.viewModels.UsersViewModel
 
 @Composable
@@ -26,7 +27,8 @@ fun NavigationGraph(
     navController: NavHostController,
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
-    spotifyAPIViewModel: SpotifyAPIViewModel
+    spotifyAPIViewModel: SpotifyAPIViewModel,
+    phoneManagerViewModel: PhoneManagerViewModel
 ){
     var spotifyToken = spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
 
@@ -69,12 +71,12 @@ fun NavigationGraph(
         composable(MusicalBarRoute.Playlist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-                    ?.let { PlaylistListView(playlistViewModel, navController, it) }
+                    ?.let { PlaylistListView(phoneManagerViewModel, playlistViewModel, navController, it) }
         }
         composable(MusicalInternalAppRoute.RemovePlaylist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-                    ?.let { PlaylistListView(playlistViewModel, navController, it) }
+                    ?.let { PlaylistListView(phoneManagerViewModel, playlistViewModel, navController, it) }
         }
         composable(MusicalInternalAppRoute.LoadPlaylist.route,
             arguments = listOf(navArgument("playlistID"){type = NavType.StringType})){

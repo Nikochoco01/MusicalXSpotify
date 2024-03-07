@@ -27,7 +27,7 @@ fun MusicListView(
     playlistId: Int
 ){
     LaunchedEffect(Unit){
-        playlistViewModel.fetchPhoneFilePlaylist(playlistId)
+        playlistViewModel.fetchPlaylistByID(playlistId)
     }
 
     val gotLiveData by playlistViewModel.phoneFileLiveData.observeAsState(

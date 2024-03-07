@@ -3,10 +3,10 @@ package com.myapplication.model
 import com.google.gson.annotations.SerializedName
 
 data class MusicalPlaylists(
-    val id: String,
-    val images: String,
-    val name: String,
-    val tracks: List<Musics>
+	val id: Int,
+	val images: String,
+	val name: String,
+	var tracks: List<Musics>
 )
 
 data class SpotifyPlaylist(
