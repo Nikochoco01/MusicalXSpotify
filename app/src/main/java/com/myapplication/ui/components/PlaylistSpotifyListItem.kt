@@ -24,8 +24,8 @@ import com.myapplication.navigation.MusicalInternalAppRoute
 @Composable
 fun PlaylistSpotifyListItem(
 	playlist: SpotifyPlaylist,
-	navController: NavController,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	onSelectPlaylist: () -> Unit
 ){
 	ElevatedCard(
 		elevation = CardDefaults.cardElevation(
@@ -34,11 +34,9 @@ fun PlaylistSpotifyListItem(
 		modifier = Modifier
 			.size(width = 160.dp, height = 224.dp)
 			.clip(RoundedCornerShape(12.dp))
-//			.clickable {
-//				var route: String = "${MusicalInternalAppRoute.LoadPlaylist.route}"
-//					.replace("{playlistID}", "${playlist.id}")
-//				navController.navigate(route)
-//			}
+			.clickable {
+				onSelectPlaylist.invoke()
+			}
 	) {
 		Column(
 			modifier
