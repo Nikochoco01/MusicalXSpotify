@@ -6,6 +6,7 @@ import com.myapplication.dataSource.phoneFile.PhoneFilesDataSource
 import com.myapplication.dataSource.spotifyApi.NetworkDataSource
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.model.SpotifyResultPlaylist
+import com.myapplication.model.SpotifyResultTracks
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -22,7 +23,11 @@ object PlaylistRepository {
     suspend fun createPlaylist(context: Context, fileUri: Uri): Flow<Boolean> = flow{
         emit(PhoneFilesDataSource.createPlaylist(context, fileUri))
     }
-    suspend fun getAllSpotifyPlaylists(userId: String, authorization: String): Flow<Response<SpotifyResultPlaylist>> = flow{
-        emit(NetworkDataSource.apiServiceCallAPi.getAllUsersPlaylists(userId, authorization))
+    suspend fun getAllSpotifyPlaylists(userId: String, token: String): Flow<Response<SpotifyResultPlaylist>> = flow{
+        emit(NetworkDataSource.apiServiceCallAPi.getAllUsersPlaylists(userId, token))
+    }
+
+    suspend fun getAllTracksFromPlaylist(playlistID: String, token: String): Flow<Response<SpotifyResultTracks>> = flow{
+        emit(NetworkDataSource.apiServiceCallAPi.getAllTracksFromPlaylist(playlistID, token))
     }
 }
