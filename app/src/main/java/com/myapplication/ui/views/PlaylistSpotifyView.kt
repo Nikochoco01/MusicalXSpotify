@@ -36,12 +36,9 @@ fun PlaylistSpotifyView(
 	LaunchedEffect(Unit){
 		playlistViewModel.fetchAllSpotifyPlaylist(
 			"31noc2ncy5jd6vj6ylnbx5xddgcu",
-			"BQBKXQtwFjTNLMd29G8ZAlRc2zZVYALXBWbPpqSR3xh-U0dhhrASYlctNu7lfrXNRwQEddaHquhjnt7XPg-xDpI0rTeV7lpdYqb1kwJznAZ_Dm6KTyA")
+			"BQDg7ivRCYUNEV_l1mx9hOBmweGKD9vUDli_Kba_v1yrLdTYvH3BzRcarKPBGxuohjodcR6Sy3K6zQ2m9fIKl_ZNH35_rDU9iay3NDAKeUhAc-GWD0E")
 	}
-
 	val spotifyPlaylist by playlistViewModel.spotifyResultPlaylists.observeAsState()
-
-	Log.e("error", "playlists spotify ${spotifyPlaylist?.playlists}")
 
 	if(spotifyPlaylist == null){
 		AlertDialog(
@@ -51,16 +48,14 @@ fun PlaylistSpotifyView(
 		)
 	}
 	else{
-//		if(navController.currentBackStackEntry?.destination?.route == MusicalRoute.PLAYLIST_REMOVE)
-//			PlaylistsSpotifyListRemove(allPlaylists)
-//		else
-		spotifyPlaylist?.playlists?.let { PlaylistsSpotifyList(navController, it) }
+		spotifyPlaylist?.playlists?.let { PlaylistsSpotifyList(navController, playlistViewModel, it) }
 	}
 }
 
 @Composable
 fun PlaylistsSpotifyList(
 	navController: NavController,
+	playlistViewModel: PlaylistViewModel,
 	playlists : List<SpotifyPlaylist>
 ){
 	LazyVerticalGrid(
@@ -74,7 +69,14 @@ fun PlaylistsSpotifyList(
 		verticalArrangement = Arrangement.spacedBy(16.dp),
 		horizontalArrangement = Arrangement.spacedBy(16.dp)){
 		items(playlists){
-				playlist -> PlaylistSpotifyListItem(playlist = playlist, navController)
+				playlist ->
+			PlaylistSpotifyListItem(playlist = playlist, onSelectPlaylist = {
+				playlistViewModel.fetchAllTracksFromPlaylist(playlist.id,
+					"BQDg7ivRCYUNEV_l1mx9hOBmweGKD9vUDli_Kba_v1yrLdTYvH3BzRcarKPBGxuohjodcR6Sy3K6zQ2m9fIKl_ZNH35_rDU9iay3NDAKeUhAc-GWD0E")
+				//var route: String = "${MusicalInternalAppRoute.LoadPlaylist.route}"
+//					.replace("{playlistID}", "${playlist.id}")
+//				navController.navigate(route)
+			})
 		}
 	}
 }
