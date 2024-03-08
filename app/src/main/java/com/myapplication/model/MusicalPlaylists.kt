@@ -18,15 +18,6 @@ data class SpotifyPlaylist(
     val tracks: SpotifyTracks
 )
 
-data class PictureSpotify(
-    @SerializedName("height")
-    val height: Int,
-    @SerializedName("url")
-    val url: String,
-    @SerializedName("width")
-    val width: Int
-)
-
 data class SpotifyTracks(
     @SerializedName("href")
     val href: String
