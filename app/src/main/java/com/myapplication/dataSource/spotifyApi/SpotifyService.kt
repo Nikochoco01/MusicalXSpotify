@@ -2,7 +2,9 @@ package com.myapplication.dataSource.spotifyApi
 
 import com.myapplication.model.MusicalPlaylists
 import com.myapplication.model.Musics
+import com.myapplication.model.SpotifyMusics
 import com.myapplication.model.SpotifyResultPlaylist
+import com.myapplication.model.SpotifyResultTracks
 import com.myapplication.model.accessToken.AccessToken
 import com.myapplication.model.users.SpotifyUsers
 import retrofit2.Response
@@ -28,6 +30,12 @@ interface SpotifyService {
         @Path("user_id") id: String,
         @Header("Authorization") authorization: String
     ): Response<SpotifyResultPlaylist>
+
+    @GET("playlists/{playlist_id}/tracks")
+    suspend fun getAllTracksFromPlaylist(
+        @Path("playlist_id") id: String,
+        @Header("Authorization") authorization: String
+    ): Response<SpotifyResultTracks>
 
     @GET("playlists/{playlist_id}")
     suspend fun getPlaylistById(
