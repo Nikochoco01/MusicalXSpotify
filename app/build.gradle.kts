@@ -98,6 +98,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
 
+    //Coil for picture from URL
+    implementation("io.coil-kt:coil-compose:1.3.2")
+
     // ROOM
     val roomVersion = "2.5.0"
 
