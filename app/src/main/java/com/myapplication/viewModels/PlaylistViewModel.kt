@@ -72,13 +72,15 @@ class PlaylistViewModel : ViewModel(){
 
     fun fetchAllSpotifyPlaylist(userId: String, token: String){
         viewModelScope.launch {
+            Log.e("error", "token in ViewModel $token")
             var validToken = "Bearer $token"
+            Log.e("error", "Valid token in ViewModel $validToken")
             PlaylistRepository.getAllSpotifyPlaylists(userId, validToken)
                 .catch {
                     Log.e("fetch playlists error" , it.toString())
                 }
                 .collect{
-                    Log.e("error" , "Result success ${it.isSuccessful}  Body ${it.body()}")
+                    Log.e("error" , "Fetch playlist Result success ${it.isSuccessful}  Body ${it.body()}")
                     _spotifyResultPlaylistsLiveData.postValue(it.body())
                 }
         }
