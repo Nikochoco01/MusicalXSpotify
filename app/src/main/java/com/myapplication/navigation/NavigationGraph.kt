@@ -33,7 +33,8 @@ fun NavigationGraph(
     playlistViewModel: PlaylistViewModel,
     usersViewModel: UsersViewModel,
     spotifyAPIViewModel: SpotifyAPIViewModel,
-    phoneManagerViewModel: PhoneManagerViewModel
+    phoneManagerViewModel: PhoneManagerViewModel,
+    logout : () -> Unit
 ){
     val lifecycleOwner = LocalLifecycleOwner.current
     var spotifyID = remember { mutableStateOf( "") }
@@ -42,8 +43,6 @@ fun NavigationGraph(
         if (spotifyTokenResponse != null) {
             if (spotifyTokenResponse.isSuccessful) {
                 token.value = spotifyTokenResponse.body()?.accessToken.toString()
-                Log.e("error" , "Token is got ${token.value}")
-                Log.e("error" , "SpotifyID is got ${spotifyID.value}")
 
                 navController.navigate(MusicalBarRoute.Reader.route){
                 popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true } }
@@ -62,6 +61,11 @@ fun NavigationGraph(
                         if(userLogged.spotifyUsersID != null){
                             spotifyID.value = userLogged.spotifyUsersID.toString()
                             spotifyAPIViewModel.fetchSpotifyToken()
+                        }
+                        else{
+                            navController.navigate(MusicalBarRoute.Reader.route){
+                                popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true }
+                            }
                         }
                     }
                 }
@@ -111,7 +115,9 @@ fun NavigationGraph(
         composable(MusicalBarRoute.Settings.route){
             SettingsView(modifier,
                 usersViewModel = usersViewModel,
-                onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
+                onNavigate = {
+                    logout.invoke()
+                    navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
                 }
             })
