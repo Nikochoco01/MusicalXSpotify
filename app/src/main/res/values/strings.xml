@@ -44,6 +44,10 @@
     <string name="icon_login">icon login</string>
     <string name="icon_arrow_right">Arrow Right</string>
 
+    <string name="application_logo">MusicalXSpotifyLogo</string>
+    <string name="application_build_debug">debug build</string>
+    <string name="application_build_release">release build</string>
+  
     <string name="image_playlist_cant_be_load">Picture by default of playlist</string>
     <string name="image_music_cant_be_load">Picture by default of music</string>
     <string name="image_playlist_from_spotify">Picture of playlist from spotify</string>
