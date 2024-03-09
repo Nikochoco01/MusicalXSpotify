@@ -1,6 +1,7 @@
 package com.myapplication
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -81,7 +82,10 @@ fun MusicalAppContent(
                 modifier
                     .fillMaxSize()
                     .padding(paddingValues) ){
-                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, spotifyAPIViewModel, phoneManagerViewModel)
+                NavigationGraph(modifier, navController, playlistViewModel, usersViewModel, spotifyAPIViewModel, phoneManagerViewModel, logout = {
+                    usersViewModel.fetchUserByCredential("" , "")
+                    userMusicalManager.isConnected = false
+                })
             } },
         bottomBar = {
             if(userMusicalManager.isConnected)

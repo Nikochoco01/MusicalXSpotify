@@ -1,6 +1,5 @@
 package com.myapplication.ui.views
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,11 +23,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.myapplication.model.users.MusicalUsers
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.UsersViewModel
+import com.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,15 +69,15 @@ fun LoginView(
                 value = email,
                 onValueChange = { email = it },
                 modifier.fillMaxWidth(),
-                label = { Text(text = "Email")},
-                placeholder = { Text(text = "Enter your email") }
+                label = { Text(text = stringResource(id = R.string.label_input_mail))},
+                placeholder = { Text(text = stringResource(id = R.string.placeholder_input_mail)) }
             )
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 modifier.fillMaxWidth(),
-                label = { Text(text = "Password")},
-                placeholder = { Text(text = "Enter your password") }
+                label = { Text(text = stringResource(id = R.string.label_input_password))},
+                placeholder = { Text(text = stringResource(id = R.string.placeholder_input_password)) }
             )
         }
         Row (
@@ -88,8 +89,8 @@ fun LoginView(
                 modifier
                     .width(144.dp)
                     .height(48.dp)) {
-                Icon(imageVector = MusicalIcons.iconAdd, contentDescription = "Add icon")
-                Text(text = "Subscribe")
+                Icon(imageVector = MusicalIcons.iconAdd, contentDescription = stringResource(id = R.string.icon_add))
+                Text(text = stringResource(id = R.string.action_subscribe))
             }
             Button(onClick = {
                 if(email.isNotBlank() && email.isNotEmpty() && password.isNotBlank() && password.isNotEmpty()){
@@ -99,8 +100,8 @@ fun LoginView(
                 modifier
                     .width(144.dp)
                     .height(48.dp)) {
-                Icon(imageVector = MusicalIcons.iconLogin, contentDescription = "Login icon")
-                Text(text = "Login")
+                Icon(imageVector = MusicalIcons.iconLogin, contentDescription = stringResource(id = R.string.icon_login))
+                Text(text = stringResource(id = R.string.action_login))
             }
         }
     }
