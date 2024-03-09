@@ -16,11 +16,20 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class UsersViewModel : ViewModel() {
-    private var _spotifyUsersLiveData : MutableLiveData<Response<SpotifyUsers>?> = MutableLiveData<Response<SpotifyUsers>?>()
-    val spotifyUsersLiveData : LiveData<Response<SpotifyUsers>?> = _spotifyUsersLiveData
+    private var _musicalUsersCreated : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val musicalUsersCreated : LiveData<Boolean> = _musicalUsersCreated
 
-    private var _musicalUsersLiveData : MutableLiveData<Response<MusicalUsers>?> = MutableLiveData<Response<MusicalUsers>?>()
-    val musicalUsersLiveData : LiveData<Response<MusicalUsers>?> = _musicalUsersLiveData
+    private var _musicalUsersUpdated : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val musicalUsersUpdated : LiveData<Boolean> = _musicalUsersUpdated
+
+    private var _musicalUsersRemoved : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val musicalUsersRemoved : LiveData<Boolean> = _musicalUsersRemoved
+
+    private var _spotifyUsersLiveData : MutableLiveData<Response<SpotifyUsers>?> = MutableLiveData<Response<SpotifyUsers>?>()
+    val spotifyUsersRecover : LiveData<Response<SpotifyUsers>?> = _spotifyUsersLiveData
+
+    private var _musicalUsersLiveData : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
+    val musicalUsersLiveData : LiveData<MusicalUsers?> = _musicalUsersLiveData
 
     private var _musicalUsersAuthentication : MutableLiveData<MusicalUsers?> = MutableLiveData<MusicalUsers?>()
     val musicalUsersAuthentication : LiveData<MusicalUsers?> = _musicalUsersAuthentication
@@ -42,30 +51,65 @@ class UsersViewModel : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 UsersMusicalRepository.createMusicalUser(pseudo, email, password)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }.collect{
+                        _musicalUsersCreated.postValue(it)
+                    }
             }
         }
     }
 
-    fun fetchSpotifyUser(id : String){
+    fun updateMusicalUser(users: MusicalUsers){
         viewModelScope.launch {
-            UsersSpotifyRepository.getUsersDetails(id)
-                .catch {
-                    Log.e("Fetch error" , it.toString())
-                }
-                .collect{
-                    _spotifyUsersLiveData.postValue(it)
-                }
+            withContext(Dispatchers.IO) {
+                UsersMusicalRepository.updateExistingUser(users)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }.collect{
+                        _musicalUsersUpdated.postValue(it)
+                    }
+            }
         }
     }
-    fun fetchMusicalUser(id: String){
+
+    fun deleteMusicalUser(users: MusicalUsers){
         viewModelScope.launch {
-            UsersMusicalRepository.getUsersDetails(id)
-                .catch {
-                    Log.e("Fetch error" , it.toString())
-                }
-                .collect{
-                    _musicalUsersLiveData.postValue(it)
-                }
+            withContext(Dispatchers.IO) {
+                UsersMusicalRepository.deleteExistingUser(users)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }.collect{
+                        _musicalUsersRemoved.postValue(it)
+                    }
+            }
+        }
+    }
+    fun fetchMusicalUserByMusicalID(id: Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                UsersMusicalRepository.getExistingUserByMusicalUserID(id)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }
+                    .collect{
+                        _musicalUsersLiveData.postValue(it)
+                    }
+            }
+        }
+    }
+    fun fetchSpotifyUserBySpotifyID(token: String, id : String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                var validToken = "Bearer $token"
+                UsersSpotifyRepository.getSpotifyUsers(validToken, id)
+                    .catch {
+                        Log.e("Fetch error" , it.toString())
+                    }
+                    .collect{
+                        _spotifyUsersLiveData.postValue(it)
+                    }
+            }
         }
     }
 }

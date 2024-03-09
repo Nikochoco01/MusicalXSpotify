@@ -1,5 +1,6 @@
 package com.myapplication.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.myapplication.model.users.MusicalUsers
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.UsersViewModel
@@ -33,11 +36,19 @@ fun LoginView(
     modifier: Modifier,
     usersViewModel: UsersViewModel,
     onNavigateToSubscribe: () -> Unit,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: (MusicalUsers?) -> Unit
 ){
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState(initial = null)
+    val userLogged by usersViewModel.musicalUsersAuthentication.observeAsState()
+
+    LaunchedEffect(userLogged){
+        if(userLogged != null){
+            if(userLogged?.mail == email && userLogged?.password == password){
+                onLoginSuccess.invoke(userLogged)
+            }
+        }
+    }
 
     Column(
         modifier
@@ -84,9 +95,6 @@ fun LoginView(
                 if(email.isNotBlank() && email.isNotEmpty() && password.isNotBlank() && password.isNotEmpty()){
                     usersViewModel.fetchUserByCredential(email, password)
                 }
-//                if(userLogged?.mail == email && userLogged?.password == password){
-//                    onLoginSuccess.invoke()
-//                }
             },
                 modifier
                     .width(144.dp)

@@ -16,14 +16,12 @@ class SpotifyAPIViewModel : ViewModel() {
     val spotifyTokenLiveData : LiveData<Response<AccessToken>?> = _spotifyTokenLiveData
 
     fun fetchSpotifyToken(){
-        Log.e("Test Call" , "CALL");
         viewModelScope.launch {
                 TokenRepository.getSpotifyToken()
                 .catch {
                     Log.e("token error" , it.toString())
                 }
                 .collect{
-                    Log.e("token" , it.body()?.accessToken ?: "token vide")
                     _spotifyTokenLiveData.postValue(it)
                 }
         }

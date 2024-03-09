@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
+import com.myapplication.viewModels.PhoneManagerViewModel
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -26,12 +27,17 @@ class MainActivity : ComponentActivity() {
     private val spotifyAPIViewModel : SpotifyAPIViewModel by viewModels()
     private val playlistViewModel : PlaylistViewModel by viewModels()
     private val usersViewModel : UsersViewModel by viewModels()
+    private val phoneManagerViewModel: PhoneManagerViewModel by viewModels()
     private val userMusicalManager = UserMusicalManager.getInstance()
     private val isDevelopBuild: Boolean = BuildConfig.IS_DEVELOP_BUILD
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        phoneManagerViewModel.initContext(this)
+        phoneManagerViewModel.takePermission()
+        phoneManagerViewModel.takePhoneFile()
         setContent {
             MusicalXSpotifyTheme {
                 // A surface container using the 'background' color from the theme
@@ -40,10 +46,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MusicalApp(
+                        userMusicalManager,
                         spotifyAPIViewModel,
+                        phoneManagerViewModel,
                         playlistViewModel,
-                        usersViewModel,
-                        userMusicalManager
+                        usersViewModel
                     )
 //                    var showSplashScreen: Boolean by remember{ mutableStateOf(true) }
 //
