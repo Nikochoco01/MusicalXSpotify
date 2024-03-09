@@ -1,4 +1,4 @@
-package com.myapplication.ui.components
+package com.myapplication.ui.components.spotify
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,10 +35,11 @@ import com.myapplication.ui.utils.MusicalIcons
 @Composable
 fun SpotifyDialog(
 	modifier: Modifier,
+	spotifyID: String,
 	onSaveRequest: (String) -> Unit,
 	onDismissRequest: () -> Unit
 ){
-	var spotifyUserID by rememberSaveable { mutableStateOf("") }
+	var spotifyUserID by rememberSaveable { mutableStateOf(spotifyID) }
 	Dialog(onDismissRequest = { onDismissRequest.invoke()}) {
 		Card (
 			modifier = modifier
