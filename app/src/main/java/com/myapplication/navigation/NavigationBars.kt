@@ -35,6 +35,7 @@ fun NavTopBar(modifier: Modifier,
                 MusicalInternalAppRoute.RemoveMusic.route -> MusicalInternalAppRoute.RemoveMusic.routeName
                 MusicalInternalAppRoute.LoadPlaylist.route -> MusicalInternalAppRoute.LoadPlaylist.routeName
                 MusicalInternalAppRoute.LoadSpotifyPlaylist.route -> MusicalInternalAppRoute.LoadSpotifyPlaylist.routeName
+                MusicalInternalAppRoute.LoadSpotifyMusics.route -> MusicalInternalAppRoute.LoadSpotifyMusics.routeName
                 MusicalBarRoute.Reader.route -> MusicalBarRoute.Reader.routeName
                 MusicalBarRoute.Playlist.route -> MusicalBarRoute.Playlist.routeName
                 MusicalBarRoute.Settings.route -> MusicalBarRoute.Settings.routeName

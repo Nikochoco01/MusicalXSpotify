@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.myapplication.ui.views.MusicSpotifyListView
 import com.myapplication.ui.views.LoginView
 import com.myapplication.viewModels.PlaylistViewModel
 import com.myapplication.ui.views.MusicListView
@@ -31,11 +35,19 @@ fun NavigationGraph(
     spotifyAPIViewModel: SpotifyAPIViewModel,
     phoneManagerViewModel: PhoneManagerViewModel
 ){
-    var spotifyToken = spotifyAPIViewModel.spotifyTokenLiveData.observeAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var spotifyID = remember { mutableStateOf( "") }
+    var token = remember { mutableStateOf( "") }
+    spotifyAPIViewModel.spotifyTokenLiveData.observe(lifecycleOwner) { spotifyTokenResponse ->
+        if (spotifyTokenResponse != null) {
+            if (spotifyTokenResponse.isSuccessful) {
+                token.value = spotifyTokenResponse.body()?.accessToken.toString()
+                Log.e("error" , "Token is got ${token.value}")
+                Log.e("error" , "SpotifyID is got ${spotifyID.value}")
 
-    LaunchedEffect(spotifyToken){
-        if(spotifyToken.value != null){
-            Log.e("error", "SpotifyToken ${spotifyAPIViewModel.spotifyTokenLiveData.value}")
+                navController.navigate(MusicalBarRoute.Reader.route){
+                popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true } }
+            }
         }
     }
 
@@ -48,12 +60,9 @@ fun NavigationGraph(
                 onLoginSuccess = { userLogged ->
                     if (userLogged != null) {
                         if(userLogged.spotifyUsersID != null){
-                            Log.e("error", "call spotify")
-//                            spotifyAPIViewModel.fetchSpotifyToken()
+                            spotifyID.value = userLogged.spotifyUsersID.toString()
+                            spotifyAPIViewModel.fetchSpotifyToken()
                         }
-                        Log.e("error", "OnLoginSuccess")
-                        navController.navigate(MusicalBarRoute.Reader.route){
-                            popUpTo(MusicalInternalAppRoute.Login.route) { inclusive = true } }
                     }
                 }
             )
@@ -77,12 +86,17 @@ fun NavigationGraph(
         composable(MusicalInternalAppRoute.LoadSpotifyPlaylist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
-            ?.let { PlaylistSpotifyView(playlistViewModel, navController, it) }
+            ?.let { PlaylistSpotifyView(playlistViewModel, navController, spotifyID.value, token = token.value) }
         }
         composable(MusicalInternalAppRoute.RemovePlaylist.route,
             arguments = listOf(navArgument("userID"){type = NavType.StringType})){
                 backStackEntry -> backStackEntry.arguments?.getString("userID")
                     ?.let { PlaylistListView(phoneManagerViewModel, playlistViewModel, navController, it) }
+        }
+        composable(MusicalInternalAppRoute.LoadSpotifyMusics.route,
+            arguments = listOf(navArgument("playlistID"){type = NavType.StringType})){
+                backStackEntry -> backStackEntry.arguments?.getString("playlistID")
+            ?.let { idObtained -> MusicSpotifyListView(playlistViewModel, idObtained, token = token.value) }
         }
         composable(MusicalInternalAppRoute.LoadPlaylist.route,
             arguments = listOf(navArgument("playlistID"){type = NavType.StringType})){
@@ -97,7 +111,6 @@ fun NavigationGraph(
         composable(MusicalBarRoute.Settings.route){
             SettingsView(modifier,
                 usersViewModel = usersViewModel,
-                spotifyAPIViewModel = spotifyAPIViewModel,
                 onNavigate = { navController.navigate(MusicalInternalAppRoute.Login.route){
                     popUpTo(MusicalBarRoute.Reader.route) { inclusive = true }
                 }

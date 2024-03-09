@@ -12,6 +12,7 @@ object MusicalRoute {
     const val USER_SPOTIFY_PLAYLISTS = "user/{userID}/spotify"
     const val PLAYLIST_REMOVE = "user/{userID}/playlists/remove"
     const val PLAYLIST_MUSICS = "playlists/{playlistID}/musics"
+    const val SPOTIFY_MUSICS = "spotify/{playlistID}/musics"
     const val MUSICS_REMOVE = "playlists/{playlistID}/musics/remove"
     const val SETTINGS = "Settings"
 }
@@ -23,6 +24,7 @@ object MusicalRouteName {
     const val PLAYLISTS_SPOTIFY_NAME = "Spotify Playlists"
     const val REMOVE_PLAYLIST_NAME = "Remove Playlists"
     const val MUSICS_NAME = "Musics"
+    const val MUSICS_SPOTIFY_NAME = "Spotify Musics"
     const val REMOVE_MUSICS_NAME = "Remove Musics"
     const val SETTINGS_NAME = "Settings"
 }
@@ -42,6 +44,10 @@ sealed class MusicalInternalAppRoute (
     object LoadPlaylist: MusicalInternalAppRoute(
         routeName = MusicalRouteName.MUSICS_NAME,
         route = MusicalRoute.PLAYLIST_MUSICS
+    )
+    object  LoadSpotifyMusics: MusicalInternalAppRoute(
+        routeName = MusicalRouteName.MUSICS_SPOTIFY_NAME,
+        route = MusicalRoute.SPOTIFY_MUSICS
     )
     object LoadSpotifyPlaylist: MusicalInternalAppRoute(
         routeName = MusicalRouteName.PLAYLISTS_SPOTIFY_NAME,
