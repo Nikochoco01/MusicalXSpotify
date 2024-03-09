@@ -12,6 +12,7 @@ data class MusicalPlaylists(
 data class SpotifyPlaylist(
     @SerializedName("id")
     val id: String,
+    @SerializedName("images")
     val images: List<PictureSpotify>? = null,
     @SerializedName("name")
     val name: String,
