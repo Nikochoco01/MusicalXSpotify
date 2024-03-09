@@ -21,7 +21,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.myapplication.R
 import com.myapplication.navigation.MusicalInternalAppRoute
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.UsersViewModel
@@ -56,22 +58,22 @@ fun  SubscribeView(
                 value = pseudo,
                 onValueChange = { pseudo = it },
                 modifier.fillMaxWidth(),
-                label = { Text(text = "Pseudo")},
-                placeholder = { Text(text = "Enter your pseudo") }
+                label = { Text(text = stringResource(id = R.string.label_input_pseudo))},
+                placeholder = { Text(text = stringResource(id = R.string.placeholder_input_pseudo)) }
             )
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
                 modifier.fillMaxWidth(),
-                label = { Text(text = "Email")},
-                placeholder = { Text(text = "Enter your email") }
+                label = { Text(text = stringResource(id = R.string.label_input_mail))},
+                placeholder = { Text(text = stringResource(id = R.string.placeholder_input_mail)) }
             )
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 modifier.fillMaxWidth(),
-                label = { Text(text = "Password")},
-                placeholder = { Text(text = "Enter your password") }
+                label = { Text(text = stringResource(id = R.string.label_input_password))},
+                placeholder = { Text(text = stringResource(id = R.string.placeholder_input_password)) }
             )
         }
         Row (
@@ -83,8 +85,8 @@ fun  SubscribeView(
                 modifier
                     .width(144.dp)
                     .height(48.dp)) {
-                Icon(imageVector = MusicalIcons.iconClose, contentDescription = "Cancel icon")
-                Text(text = "Cancel")
+                Icon(imageVector = MusicalIcons.iconClose, contentDescription = stringResource(id = R.string.icon_cancel))
+                Text(text = stringResource(id = R.string.action_close_dialog))
             }
             Button(
                 onClick = {
@@ -95,8 +97,8 @@ fun  SubscribeView(
                     .width(144.dp)
                     .height(48.dp)
             ) {
-                Icon(imageVector = MusicalIcons.iconAdd, contentDescription = "Subscribe icon")
-                Text(text = "Subscribe")
+                Icon(imageVector = MusicalIcons.iconAdd, contentDescription = stringResource(id = R.string.icon_subscribe))
+                Text(text = stringResource(id = R.string.action_subscribe))
             }
         }
     }
