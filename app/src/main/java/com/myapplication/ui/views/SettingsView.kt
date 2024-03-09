@@ -9,16 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.myapplication.R
-import com.myapplication.model.users.MusicalUsers
 import com.myapplication.ui.components.MusicalSettingItem
-import com.myapplication.ui.components.SpotifyDialog
+import com.myapplication.ui.components.spotify.SpotifyDialog
 import com.myapplication.ui.utils.MusicalIcons
 import com.myapplication.viewModels.SpotifyAPIViewModel
 import com.myapplication.viewModels.UsersViewModel
@@ -26,31 +24,19 @@ import com.myapplication.viewModels.UsersViewModel
 @Composable
 fun SettingsView(
     modifier: Modifier = Modifier,
-    spotifyAPIViewModel: SpotifyAPIViewModel,
     usersViewModel: UsersViewModel,
     onNavigate: () -> Unit
 ){
     val userLogged = usersViewModel.musicalUsersLiveData.observeAsState(initial = null)
-    val userSpotify = usersViewModel.spotifyUsersRecover.observeAsState(initial = null)
+    var userSpotify = remember { mutableStateOf("") }
     val userUpdated = usersViewModel.musicalUsersUpdated.observeAsState(initial = false)
     val showSpotifyDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit){
         usersViewModel.fetchMusicalUserByMusicalID(1)
-
-        usersViewModel.fetchSpotifyUserBySpotifyID(
-            "BQCwx77mh-TrDGxnuuLWHL5rXZQMX5b9xDzESjMSbcML0TNlfNzujzmeEJN-_EAt43plHz55eD8qHfNHMaqrUYXCQI68jrc1fD9A9ZSeDdx4ohhK5jw",
-            "31noc2ncy5jd6vj6ylnbx5xddgcu")
-
-//        if(userLogged != null){
-//            Log.e("error", "Local user id: ${userLogged.value?.id}  spotifyID: ${userLogged.value?.spotifyUsersID}")
-////            if(userLogged?.value?.spotifyUsersID != null){
-////
-////
-////                Log.e("error", "1 User Spotify ${userSpotify.value}")
-////            }
-//
-//        }
+        if(userLogged.value?.spotifyUsersID != null){
+            userSpotify.value = userLogged.value!!.spotifyUsersID.toString()
+        }
     }
     Column (
         modifier
@@ -76,11 +62,11 @@ fun SettingsView(
         )
         if(showSpotifyDialog.value){
             SpotifyDialog(modifier = modifier,
+                spotifyID = userSpotify.value,
                 onSaveRequest = {spotifyUserID ->
                     if(userLogged.value != null){
                         userLogged.value?.spotifyUsersID = spotifyUserID
                         usersViewModel.updateMusicalUser(userLogged.value!!)
-                        Log.e("error", "Update Value ${userUpdated.value}")
                         if(userUpdated.value){
                             showSpotifyDialog.value = false
                         }
