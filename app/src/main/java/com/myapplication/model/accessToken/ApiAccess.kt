@@ -1,11 +1,12 @@
 package com.myapplication.model.accessToken
 
 import com.google.gson.annotations.SerializedName
+import com.myapplication.BuildConfig
 
 data class ApiAccess(
     @SerializedName("grant_type")
-    val grantType: String = "client_credentials",
+    val grantType: String = BuildConfig.GRANT_TYPE,
     @SerializedName("client_id")
-    val clientId: String = "97e4ffd132de48b994e860461e571c6a",
+    val clientId: String = BuildConfig.CLIENT_ID,
     @SerializedName("client_secret")
-    val clientSecret: String = "633a5550b7374b63939eeef8dbc0a091")
+    val clientSecret: String = BuildConfig.CLIENT_SECRET)

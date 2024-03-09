@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">MusicalXSpotify</string>
-    <string name="login_menu">Login</string>
     <string name="tab_reader">Reader</string>
     <string name="tab_playlists">Playlists</string>
     <string name="tab_settings">Settings</string>
@@ -11,4 +10,46 @@
     <string name="timer_reader">00:00:00</string>
     <string name="title_label">Music Title</string>
     <string name="artist_label">Music Artist</string>
+
+    <string name="setting_account">Account</string>
+    <string name="setting_account_spotify">Spotify Account</string>
+    <string name="setting_bluetooth">Bluetooth</string>
+    <string name="setting_Dark_mode">Dark mode</string>
+    <string name="setting_Light_mode">Light mode</string>
+    <string name="setting_Logout">Logout</string>
+
+    <string name="label_input_pseudo">Pseudo</string>
+    <string name="label_input_mail">Email</string>
+    <string name="label_input_password">Password</string>
+    <string name="label_input_spotify_id">Spotify account ID</string>
+
+    <string name="placeholder_input_pseudo">Enter your pseudo</string>
+    <string name="placeholder_input_mail">Enter your email</string>
+    <string name="placeholder_input_password">Enter your password</string>
+    <string name="placeholder_input_spotify_id">Enter your spotify account ID</string>
+
+    <string name="action_login">Login</string>
+    <string name="action_subscribe">Subscribe</string>
+    <string name="action_save_dialog">Save</string>
+    <string name="action_close_dialog">Cancel</string>
+
+    <string name="icon_close">icon close</string>
+    <string name="icon_check">icon check</string>
+    <string name="icon_add">icon add</string>
+    <string name="icon_dark_mode">icon dark mode</string>
+    <string name="icon_light_mode">icon light mode</string>
+    <string name="icon_spotify">icon spotify logo</string>
+    <string name="icon_bluetooth">icon bluetooth logo</string>
+    <string name="icon_logout">icon logout</string>
+    <string name="icon_login">icon login</string>
+    <string name="icon_arrow_right">Arrow Right</string>
+
+    <string name="application_logo">MusicalXSpotifyLogo</string>
+    <string name="application_build_debug">debug build</string>
+    <string name="application_build_release">release build</string>
+  
+    <string name="image_playlist_cant_be_load">Picture by default of playlist</string>
+    <string name="image_music_cant_be_load">Picture by default of music</string>
+    <string name="image_playlist_from_spotify">Picture of playlist from spotify</string>
+    <string name="image_music_from_spotify">Picture of music from spotify</string>
 </resources>

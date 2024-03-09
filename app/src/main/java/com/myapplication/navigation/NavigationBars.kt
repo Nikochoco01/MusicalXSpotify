@@ -11,15 +11,22 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.myapplication.ui.MusicalIcons
+import com.myapplication.ui.components.MusicalMenu
+import com.myapplication.ui.utils.MusicalIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavTopBar(modifier: Modifier, navController: NavHostController){
+fun NavTopBar(modifier: Modifier,
+              navController: NavHostController,
+              onPermission: () -> Unit,
+              onImport: () -> Unit){
+    val menuIsExtended = remember { mutableStateOf(false) }
     val backStackEntry = navController.currentBackStackEntryAsState()
     CenterAlignedTopAppBar(modifier = modifier.background(MaterialTheme.colorScheme.surface),
         title = {
@@ -27,13 +34,15 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
                 MusicalInternalAppRoute.RemovePlaylist.route -> MusicalInternalAppRoute.RemovePlaylist.routeName
                 MusicalInternalAppRoute.RemoveMusic.route -> MusicalInternalAppRoute.RemoveMusic.routeName
                 MusicalInternalAppRoute.LoadPlaylist.route -> MusicalInternalAppRoute.LoadPlaylist.routeName
+                MusicalInternalAppRoute.LoadSpotifyPlaylist.route -> MusicalInternalAppRoute.LoadSpotifyPlaylist.routeName
+                MusicalInternalAppRoute.LoadSpotifyMusics.route -> MusicalInternalAppRoute.LoadSpotifyMusics.routeName
                 MusicalBarRoute.Reader.route -> MusicalBarRoute.Reader.routeName
                 MusicalBarRoute.Playlist.route -> MusicalBarRoute.Playlist.routeName
                 MusicalBarRoute.Settings.route -> MusicalBarRoute.Settings.routeName
-                else -> "Title no undefined"
+                else -> "Title undefined"
             }
             Text(text)
-                },
+        },
         navigationIcon = {
             when(backStackEntry.value?.destination?.route){
                 MusicalInternalAppRoute.RemovePlaylist.route -> {
@@ -68,7 +77,7 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
         actions = {
             when(backStackEntry.value?.destination?.route){
                 MusicalBarRoute.Playlist.route -> {
-                    IconButton(onClick = { navController.navigate(MusicalInternalAppRoute.RemovePlaylist.route) }) {
+                    IconButton(onClick = { menuIsExtended.value = true }) {
                         Icon(
                             imageVector = MusicalIcons.iconMenuVert,
                             contentDescription = "Localized description"
@@ -103,12 +112,31 @@ fun NavTopBar(modifier: Modifier, navController: NavHostController){
                     }
                 }
             }
+            if(menuIsExtended.value){
+                MusicalMenu(
+                    expanded = menuIsExtended,
+                    onDismiss = { menuIsExtended.value = false },
+                    removePlaylist = {
+                        navController.navigate(MusicalInternalAppRoute.RemovePlaylist.route)
+                        menuIsExtended.value = false
+                    },
+                    importPlaylist = {
+                        onPermission.invoke()
+                        onImport.invoke()
+                        menuIsExtended.value = false
+                    },
+                    findSpotifyPlaylist = {
+                        navController.navigate(MusicalInternalAppRoute.LoadSpotifyPlaylist.route)
+                        menuIsExtended.value = false
+                    }
+                )
+            }
         }
     )
 }
 
 @Composable
-fun NavBottomBar(modifier: Modifier, navController: NavHostController){
+fun NavBottomBar(modifier: Modifier, navController: NavHostController, userID : Int){
     NavigationBar(modifier = modifier.fillMaxWidth()) {
         val backStackEntry = navController.currentBackStackEntryAsState()
 
@@ -138,7 +166,7 @@ fun NavBottomBar(modifier: Modifier, navController: NavHostController){
                     MusicalInternalAppRoute.RemoveMusic.route -> true
                 else -> false
             },
-            onClick = {navController.navigate("user/1/playlists"){
+            onClick = {navController.navigate("user/$userID/playlists"){
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             } },

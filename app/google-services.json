@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "876069733741",
+    "project_id": "musicalxspotify",
+    "storage_bucket": "musicalxspotify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876069733741:android:1e4c788223817d49e1c664",
+        "android_client_info": {
+          "package_name": "com.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD69S43PL1l7YU12IjxtwlFZozf_ZQxlCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876069733741:android:75ca2b3e8f1791eae1c664",
+        "android_client_info": {
+          "package_name": "com.myapplication.prod"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD69S43PL1l7YU12IjxtwlFZozf_ZQxlCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

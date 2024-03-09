@@ -5,44 +5,72 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.myapplication.repository.users.UserMusicalManager
 import com.myapplication.ui.theme.MusicalXSpotifyTheme
+import com.myapplication.viewModels.PhoneManagerViewModel
+import com.myapplication.viewModels.SpotifyAPIViewModel
+import com.myapplication.viewModels.PlaylistViewModel
+import com.myapplication.viewModels.UsersViewModel
+import com.myapplication.ui.splashScreen.SplashScreenDebug
+import com.myapplication.ui.splashScreen.SplashScreenRelease
 
 class MainActivity : ComponentActivity() {
-    private val loginViewModel : LoginViewModel by viewModels()
+    private val spotifyAPIViewModel : SpotifyAPIViewModel by viewModels()
     private val playlistViewModel : PlaylistViewModel by viewModels()
+    private val usersViewModel : UsersViewModel by viewModels()
+    private val phoneManagerViewModel: PhoneManagerViewModel by viewModels()
+    private val userMusicalManager = UserMusicalManager.getInstance()
+    private val isDevelopBuild: Boolean = BuildConfig.IS_DEVELOP_BUILD
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        phoneManagerViewModel.initContext(this)
+        phoneManagerViewModel.takePermission()
+        phoneManagerViewModel.takePhoneFile()
         setContent {
             MusicalXSpotifyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color(0xFF6650a4)
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     MusicalApp(
-                        loginViewModel,
-                        playlistViewModel
+                        userMusicalManager,
+                        spotifyAPIViewModel,
+                        phoneManagerViewModel,
+                        playlistViewModel,
+                        usersViewModel
                     )
+//                    var showSplashScreen: Boolean by remember{ mutableStateOf(true) }
+//
+//                    if (showSplashScreen) {
+//                        if(isDevelopBuild) {
+//                            SplashScreenDebug {
+//                                showSplashScreen = false
+//                            }
+//                        }
+//                        else {
+//                            SplashScreenRelease {
+//                                showSplashScreen = false
+//                            }
+//                        }
+//                    }
+//                    else{
+//
+//                    }
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MusicalXSpotifyTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = Color(0xFF6650a4)
-        ) {
-//            MusicalApp(loginViewModel = )
         }
     }
 }
